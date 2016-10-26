@@ -5,6 +5,8 @@ from sklearn import linear_model
 from scipy.stats import pearsonr
 
 from recommenders.user_cf import UserCf
+from recommenders.item_cf import ItemCf
+
 from recommenders.io import *
 
 import sys

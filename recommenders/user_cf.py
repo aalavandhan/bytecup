@@ -10,8 +10,10 @@ class UserCf(BaseRecommender):
     def update_vector(r):
       v[ self.question_index[r['question_id']] ] = r['answered']
 
+    # Questions the user has been asked
+    questions = self.train_info[self.train_info.user_id == user]
     # Questions the user has answered
-    self.train_info[self.train_info.user_id == user].apply(update_vector, axis=1)
+    questions[questions.answered == 1].apply(update_vector, axis=1)
 
     return v
 
@@ -21,9 +23,8 @@ class UserCf(BaseRecommender):
     # active user
     active_user = self.featurize(user)
 
-    # users who've be asked this question
+    # users who've been asked the question
     users = self.train_info[self.train_info.question_id == question]
-
     # users who've answered this question
     users = users[users.answered == 1]['user_id']
     user_vectors = map(self.featurize, users)
