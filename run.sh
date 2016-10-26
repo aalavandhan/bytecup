@@ -14,4 +14,4 @@ python run.py ip/xam &
 python run.py ip/xan &
 python run.py ip/xao &
 wait
-cat ip/xaa ip/xab ip/xac ip/xad ip/xae ip/xaf ip/xag ip/xah ip/xai ip/xaj ip/xak ip/xal ip/xam ip/xan ip/xao > results.csv
+cat ip/xaa.results ip/xab.results ip/xac.results ip/xad.results ip/xae.results ip/xaf.results ip/xag.results ip/xah.results ip/xai.results ip/xaj.results ip/xak.results ip/xal.results ip/xam.results ip/xan.results ip/xao.results > results.csv
