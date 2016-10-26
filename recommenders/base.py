@@ -28,4 +28,4 @@ class BaseRecommender:
 
   def recommend(self, question, user):
     # Return a value from 0-1
-    return 0.5
+    return max(0, min(1, self._recommend(question,user)))

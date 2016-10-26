@@ -15,7 +15,7 @@ class UserCf(BaseRecommender):
 
     return v
 
-  def recommend(self, question, user):
+  def _recommend(self, question, user):
     qi = self.question_index[question]
 
     # active user
@@ -40,7 +40,7 @@ class UserCf(BaseRecommender):
     else:
       recommended = active_user.mean() + weighted_sum / sum_of_weights
 
-    return max(0, min(1, recommended))
+    return recommended
 
 
   def hyper_parameters(self, K, IGNORED):
