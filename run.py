@@ -7,7 +7,7 @@ from scipy.stats import pearsonr
 import sys
 
 UNASKED = 0
-IGNORED = -0.0001
+IGNORED = -0.01
 
 def pearsoncorr(x,y):
   return pearsonr(x, y)[ 0 ]
