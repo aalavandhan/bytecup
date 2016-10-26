@@ -7,7 +7,7 @@ from scipy.stats import pearsonr
 import sys
 
 UNASKED = 0
-IGNORED = -0.001
+IGNORED = -0.0001
 
 def pearsoncorr(x,y):
   return pearsonr(x, y)[ 0 ]
@@ -48,7 +48,7 @@ def recommend(question, user, K=3):
   else:
     recommended = active_user.mean() + weighted_sum / sum_of_weights
 
-  return min(1, recommended)
+  return max(0, min(1, recommended))
 
 
 ip = sys.argv[1]
