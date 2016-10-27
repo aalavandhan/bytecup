@@ -37,10 +37,15 @@ for index, row in question_info.iterrows():
   question_index[ row['question_id'] ] = index
 
 
-recommender = UserCf(user_info, question_info, train_info, user_index, question_index,NUMBER_OF_USERS, NUMBER_OF_QUESTIONS)
-recommender.hyper_parameters(5, -0.01)
-recommender.preprocess()
+def ensemble_recommender(row):
+  q = row['question_id']
+  u = row['user_id']
+  r = ItemCf(user_info, question_info, train_info, user_index, question_index,NUMBER_OF_USERS, NUMBER_OF_QUESTIONS)
+  r.hyper_parameters(5, -0.01)
+  r.preprocess()
+  return r.recommend(q,u)
 
-recommendations = test_info.apply(lambda row: recommender.recommend(row['question_id'], row['user_id']), axis=1)
+
+recommendations = test_info.apply(ensemble_recommender, axis=1)
 
 writeRecommendationsToFile(recommendations, test_info, TEST_PATH)

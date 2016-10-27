@@ -1,9 +1,9 @@
 import numpy as np
 from scipy.stats import pearsonr
 
-from user_cf import UserCf
+from base import BaseRecommender
 
-class ItemCf(UserCf):
+class ItemCf(BaseRecommender):
   def featurize(self, question):
     v = np.repeat(0, self.NUMBER_OF_USERS)
 
@@ -12,8 +12,8 @@ class ItemCf(UserCf):
 
     # users who've been asked the question
     users = self.train_info[self.train_info.question_id == question]
-    # users who've answered this question
-    users[users.answered == 1].apply(update_vector, axis=1)
+
+    users.apply(update_vector, axis=1)
 
     return v
 

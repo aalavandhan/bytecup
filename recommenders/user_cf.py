@@ -12,8 +12,11 @@ class UserCf(BaseRecommender):
 
     # Questions the user has been asked
     questions = self.train_info[self.train_info.user_id == user]
-    # Questions the user has answered
-    questions[questions.answered == 1].apply(update_vector, axis=1)
+
+    # Questions that belong to the current set
+    questions = questions[questions.question_id.isin(self.question_info['question_id'])]
+
+    questions.apply(update_vector, axis=1)
 
     return v
 
@@ -42,17 +45,3 @@ class UserCf(BaseRecommender):
       recommended = active_user.mean() + weighted_sum / sum_of_weights
 
     return recommended
-
-
-  def hyper_parameters(self, K, IGNORED):
-    # Hyper parameters
-    self.K = K
-    self.IGNORED = IGNORED
-    return self
-
-  def preprocess(self):
-    # Setting value for ignored
-    self.train_info.ix[self.train_info.answered == 0, 'answered'] = self.IGNORED
-    return self
-
-

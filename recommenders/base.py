@@ -14,16 +14,19 @@ class BaseRecommender:
     self.NUMBER_OF_USERS = NUMBER_OF_USERS
     self.NUMBER_OF_QUESTIONS = NUMBER_OF_QUESTIONS
 
-
   def pearsoncorr(self, x,y):
     return pearsonr(x, y)[ 0 ]
 
   def hyper_parameters(self, K, IGNORED):
-    # Set Hyper parameters
+    # Hyper parameters
+    self.K = K
+    self.IGNORED = IGNORED
     return self
 
   def preprocess(self):
-    # Do some recommender specific preprocessing
+    # Do some preprocessing
+    # Setting value for ignored
+    self.train_info.ix[self.train_info.answered == 0, 'answered'] = self.IGNORED
     return self
 
   def recommend(self, question, user):
