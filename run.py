@@ -20,7 +20,7 @@ K            = int(sys.argv[3])
 user_info = pd.read_csv("data/user-features")
 question_info = pd.read_csv("data/question-features")
 
-train_info = pd.read_csv(TRAIN_PATH, sep="\t", header=None, names=[
+train_info = pd.read_csv(TRAIN_PATH, sep=",", header=None, names=[
   "question_id", "user_id", "answered"
 ])
 
