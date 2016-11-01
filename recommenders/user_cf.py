@@ -1,47 +1,54 @@
 import numpy as np
 from scipy.stats import pearsonr
+from scipy.sparse import csr_matrix
 
 from base import BaseRecommender
 
 class UserCf(BaseRecommender):
-  def featurize(self, user):
-    v = np.repeat(0, self.NUMBER_OF_QUESTIONS)
-
-    def update_vector(r):
-      v[ self.question_index[r['question_id']] ] = r['answered']
-
-    # Questions the user has been asked
-    questions = self.train_info[self.train_info.user_id == user]
-
-    # Questions that belong to the current set
-    questions = questions[questions.question_id.isin(self.question_info['question_id'])]
-
-    questions.apply(update_vector, axis=1)
-
-    return v
-
   def _recommend(self, question, user):
-    qi = self.question_index[question]
-
     # active user
-    active_user = self.featurize(user)
+    active_user = np.array(self.rMatrix[self.user_index[user], :])[ 0 ]
 
     # users who've been asked the question
     users = self.train_info[self.train_info.question_id == question]
     # users who've answered this question
     users = users[users.answered == 1]['user_id']
-    user_vectors = map(self.featurize, users)
 
-    # top K
-    top_k = sorted(user_vectors, key=lambda x: self.pearsoncorr(active_user, x) )[ :self.K ]
+    user_indices = map(lambda u: self.user_index[u], users)
+    user_vectors = np.array(self.rMatrix[user_indices, :])
 
-    # predicted rating
-    weighted_sum = reduce(lambda m, u: m + ((u[qi] - u.mean()) * self.pearsoncorr(active_user, u)), top_k, 0)
-    sum_of_weights = reduce(lambda m, u: m + self.pearsoncorr(active_user, u), top_k, 0)
+    correlation = map(lambda u: (self.pearsoncorr(active_user, u), u), user_vectors)
+    closest_user_vectors = sorted(correlation, key=lambda x: x[0], reverse=True)
 
-    if sum_of_weights == 0 or np.isnan(weighted_sum) or np.isnan(sum_of_weights):
-      recommended = 0
+    top_k = self.topK(closest_user_vectors)
+
+    return active_user.mean() + self.prediction(top_k, self.question_index[question])
+
+  def preprocess(self, leave_one_out=False):
+    BaseRecommender.preprocess(self)
+
+    (row, col, data) = self.expand(self.train_info)
+    V = csr_matrix((data, (row, col)))
+    self.rMatrix = V.todense()
+
+    self.leave_one_out = leave_one_out
+
+    return self
+
+  def prediction(self, top_k, index):
+    weighted_sum = reduce(lambda m, u: m + ((u[1][index] - u[1].mean()) * u[0]), top_k, 0)
+    sum_of_weights = reduce(lambda m, u: m + u[0], top_k, 0)
+
+    if sum_of_weights == 0:
+      return 0
+
+    return weighted_sum / sum_of_weights
+
+
+  def topK(self, closest):
+    if not self.leave_one_out:
+      top_k = closest[ :self.K ]
     else:
-      recommended = active_user.mean() + weighted_sum / sum_of_weights
+      top_k = closest[ 1:self.K+1 ]
 
-    return recommended
+    return top_k

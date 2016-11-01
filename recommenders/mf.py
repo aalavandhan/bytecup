@@ -16,16 +16,6 @@ class MF(BaseRecommender):
     self.IGNORED = IGNORED
     return self
 
-  def expand(self, df):
-    row  = [ ]
-    col  = [ ]
-    data = [ ]
-    for i, r in df.iterrows():
-      row.append(self.user_index[r['user_id']])
-      col.append(self.question_index[r['question_id']])
-      data.append(r['answered'])
-    return (row, col, data)
-
 
   def preprocess(self):
     BaseRecommender.preprocess(self)

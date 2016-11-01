@@ -31,4 +31,19 @@ class BaseRecommender:
 
   def recommend(self, question, user):
     # Return a value from 0-1
-    return max(0, min(1, self._recommend(question,user)))
+    smoothen = lambda x: max(0, min(1, x))
+    r = self._recommend(question,user)
+    return smoothen(r)
+
+  def expand(self, df):
+    row  = [ ]
+    col  = [ ]
+    data = [ ]
+    for i, r in df.iterrows():
+      row.append(self.user_index[r['user_id']])
+      col.append(self.question_index[r['question_id']])
+      data.append(r['answered'])
+    return (row, col, data)
+
+
+

@@ -1,44 +1,24 @@
 import numpy as np
 from scipy.stats import pearsonr
 
-from base import BaseRecommender
+from user_cf import UserCf
 
-class ItemCf(BaseRecommender):
-  def featurize(self, question):
-    v = np.repeat(0, self.NUMBER_OF_USERS)
-
-    def update_vector(r):
-      v[ self.user_index[r['user_id']] ] = r['answered']
-
-    # users who've been asked the question
-    users = self.train_info[self.train_info.question_id == question]
-
-    users.apply(update_vector, axis=1)
-
-    return v
-
+class ItemCf(UserCf):
   def _recommend(self, question, user):
-    ui = self.user_index[user]
-
     # active question
-    active_question = self.featurize(question)
+    active_question = np.array( self.rMatrix[:, self.question_index[question]].transpose() )[ 0 ]
 
     # Questions the user has been asked
     questions = self.train_info[self.train_info.user_id == user]
     # Questions the user has answered
     questions = questions[questions.answered == 1]['question_id']
-    question_vectors = map(self.featurize, questions)
 
-    # top K
-    top_k = sorted(question_vectors, key=lambda x: self.pearsoncorr(active_question, x) )[ :self.K ]
+    question_indices = map(lambda q: self.question_index[q], questions)
+    question_vectors = np.array( self.rMatrix[:, question_indices].transpose() )
 
-    # predicted rating
-    weighted_sum = reduce(lambda m, u: m + ((u[ui] - u.mean()) * self.pearsoncorr(active_question, u)), top_k, 0)
-    sum_of_weights = reduce(lambda m, u: m + self.pearsoncorr(active_question, u), top_k, 0)
+    correlation = map(lambda q: (self.pearsoncorr(active_question, q), q), question_vectors)
+    closest_question_vectors = sorted(correlation, key=lambda x: x[0], reverse=True)
 
-    if sum_of_weights == 0 or np.isnan(weighted_sum) or np.isnan(sum_of_weights):
-      recommended = 0
-    else:
-      recommended = active_question.mean() + weighted_sum / sum_of_weights
+    top_k = self.topK(closest_question_vectors)
 
-    return recommended
+    return active_question.mean() + self.prediction(top_k, self.user_index[user])
