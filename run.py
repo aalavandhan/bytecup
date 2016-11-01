@@ -15,6 +15,8 @@ import sys
 TRAIN_PATH   = sys.argv[1]
 TEST_PATH    = sys.argv[2]
 
+K            = int(sys.argv[3])
+
 user_info = pd.read_csv("data/user-features")
 question_info = pd.read_csv("data/question-features")
 
@@ -37,29 +39,9 @@ question_index = { }
 for index, row in question_info.iterrows():
   question_index[ row['question_id'] ] = index
 
-
-ds1 = question_info[ question_info.answerability <= 0.2  ]
-ds2 = question_info[ question_info.answerability > 0.2   ]
-
-# r1 = MF(user_info, ds1, train_info, user_index, question_index,NUMBER_OF_USERS, len(ds1))
-# r1.hyper_parameters(10, 0, -0.01)
-# r1.preprocess()
-
-# r2 = MF(user_info, ds2, train_info, user_index, question_index,NUMBER_OF_USERS, len(ds2))
-# r2.hyper_parameters(10, 0, -0.01)
-# r2.preprocess()
-
-# r1 = UserCf(user_info, ds1, train_info, user_index, question_index,NUMBER_OF_USERS, NUMBER_OF_QUESTIONS)
-# r1.hyper_parameters(5, -0.01)
-# r1.preprocess()
-
-# r2 = UserCf(user_info, ds2, train_info, user_index, question_index,NUMBER_OF_USERS, NUMBER_OF_QUESTIONS)
-# r2.hyper_parameters(5, -0.01)
-# r2.preprocess()
-
-r = ItemCf(user_info, question_info, train_info, user_index, question_index,NUMBER_OF_USERS, NUMBER_OF_QUESTIONS)
-r.hyper_parameters(5, -0.01)
-r.preprocess()
+r = UserCf(user_info, question_info, train_info, user_index, question_index,NUMBER_OF_USERS, NUMBER_OF_QUESTIONS)
+r.hyper_parameters(K, 0)
+r.preprocess(leave_one_out=True)
 
 def ensemble_recommender(row):
   q = row['question_id']
