@@ -8,7 +8,6 @@ class MF(BaseRecommender):
   def _recommend(self, question, user):
     return self.factorized[ self.user_index[user] ][ self.question_index[question] ]
 
-
   def hyper_parameters(self, K, lb, IGNORED):
     # Hyper parameters
     self.K = K
@@ -26,6 +25,7 @@ class MF(BaseRecommender):
     model = libpmf.train(V, '-k {0} -l {1} -t {0}'.format(self.K, self.lb))
 
     self.factorized = np.dot( model['W'], model['H'].transpose() )
+
     return self
 
 

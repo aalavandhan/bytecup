@@ -24,14 +24,12 @@ class UserCf(BaseRecommender):
 
     return active_user.mean() + self.prediction(top_k, self.question_index[question])
 
-  def preprocess(self, leave_one_out=False):
+  def preprocess(self):
     BaseRecommender.preprocess(self)
 
     (row, col, data) = self.expand(self.train_info)
     V = csr_matrix((data, (row, col)))
     self.rMatrix = V.todense()
-
-    self.leave_one_out = leave_one_out
 
     return self
 

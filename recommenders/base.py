@@ -23,10 +23,11 @@ class BaseRecommender:
     self.IGNORED = IGNORED
     return self
 
-  def preprocess(self):
+  def preprocess(self, leave_one_out=False):
     # Do some preprocessing
     # Setting value for ignored
     self.train_info.ix[self.train_info.answered == 0, 'answered'] = self.IGNORED
+    self.leave_one_out = leave_one_out
     return self
 
   def recommend(self, question, user):

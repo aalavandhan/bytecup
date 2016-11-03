@@ -6,7 +6,7 @@ from scipy.stats import pearsonr
 
 from recommenders.user_cf import UserCf
 from recommenders.item_cf import ItemCf
-# from recommenders.mf      import MF
+from recommenders.mf      import MF
 
 from recommenders.io import *
 
@@ -16,7 +16,8 @@ TRAIN_PATH     = sys.argv[1]
 TEST_PATH      = sys.argv[2]
 OUTPUT_PATH    = sys.argv[3]
 
-ARGS           = eval(sys.argv[4])
+REC_TYPE       = eval(sys.argv[4])
+ARGS           = eval(sys.argv[5])
 
 user_info = pd.read_csv("data/user-features")
 question_info = pd.read_csv("data/question-features")
@@ -36,9 +37,9 @@ question_index = { }
 for index, row in question_info.iterrows():
   question_index[ row['question_id'] ] = index
 
-r = ItemCf(user_info, question_info, train_info, user_index, question_index,NUMBER_OF_USERS, NUMBER_OF_QUESTIONS)
+r = REC_TYPE(user_info, question_info, train_info, user_index, question_index,NUMBER_OF_USERS, NUMBER_OF_QUESTIONS)
 r.hyper_parameters(*ARGS)
-r.preprocess(leave_one_out=True)
+r.preprocess()
 
 def ensemble_recommender(row):
   q = row['question_id']
