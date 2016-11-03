@@ -12,21 +12,18 @@ from recommenders.io import *
 
 import sys
 
-TRAIN_PATH   = sys.argv[1]
-TEST_PATH    = sys.argv[2]
+TRAIN_PATH     = sys.argv[1]
+TEST_PATH      = sys.argv[2]
+OUTPUT_PATH    = sys.argv[3]
 
-K            = int(sys.argv[3])
+K            = int(sys.argv[4])
 
 user_info = pd.read_csv("data/user-features")
 question_info = pd.read_csv("data/question-features")
 
-train_info = pd.read_csv(TRAIN_PATH, sep=",", header=None, names=[
-  "question_id", "user_id", "answered"
-])
+train_info = pd.read_csv(TRAIN_PATH, sep=",")
 
-test_info = pd.read_csv(TEST_PATH, sep=",", header=None, names=[
-  "question_id", "user_id", "answered"
-])
+test_info = pd.read_csv(TEST_PATH, sep=",")
 
 NUMBER_OF_USERS = len(user_info)
 NUMBER_OF_QUESTIONS = len(question_info)
@@ -39,7 +36,7 @@ question_index = { }
 for index, row in question_info.iterrows():
   question_index[ row['question_id'] ] = index
 
-r = UserCf(user_info, question_info, train_info, user_index, question_index,NUMBER_OF_USERS, NUMBER_OF_QUESTIONS)
+r = ItemCf(user_info, question_info, train_info, user_index, question_index,NUMBER_OF_USERS, NUMBER_OF_QUESTIONS)
 r.hyper_parameters(K, 0)
 r.preprocess(leave_one_out=True)
 
@@ -50,4 +47,4 @@ def ensemble_recommender(row):
 
 recommendations = test_info.apply(ensemble_recommender, axis=1)
 
-writeRecommendationsToFile(recommendations, test_info, TEST_PATH)
+writeRecommendationsToFile(recommendations, test_info, TEST_PATH, OUTPUT_PATH)
