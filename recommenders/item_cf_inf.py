@@ -9,7 +9,7 @@ class ItemCfInf(ItemCf):
     return self.pearsoncorr(active['vector'], current['vector']) * inf
 
   def preprocess(self):
-    UserCf.preprocess(self)
+    ItemCf.preprocess(self)
 
     answered = self.train_info[ self.train_info.answered == 1 ].groupby('question_id').count()['answered']
     self.question_info = self.question_info.join(answered, on="question_id", how="left" )

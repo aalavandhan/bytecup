@@ -16,15 +16,15 @@
 # wait
 
 
-python run.py data/train.csv data/validate.csv data/validate.csv.results.uc1 UserCf "[11,-0.0001, 1.01]" &
-python run.py data/train.csv data/validate.csv data/validate.csv.results.uc2 UserCf "[11,-0.0001, 1.1]" &
-python run.py data/train.csv data/validate.csv data/validate.csv.results.uc3 UserCf "[11,-0.0001, 1.5]" &
-python run.py data/train.csv data/validate.csv data/validate.csv.results.uc4 UserCf "[11,-0.0001, 2]" &
-python run.py data/train.csv data/validate.csv data/validate.csv.results.uc5 UserCf "[11,-0.0001, 2.5]" &
+python run.py data/train.csv data/validate.csv data/validate.csv.results.uinf1 UserCfInf "[11,-0.0001]" &
+python run.py data/train.csv data/validate.csv data/validate.csv.results.uinf2 UserCfInf "[11,-0.0001]" &
+python run.py data/train.csv data/validate.csv data/validate.csv.results.uinf3 UserCfInf "[11,-0.0001]" &
+python run.py data/train.csv data/validate.csv data/validate.csv.results.uinf4 UserCfInf "[11,-0.0001]" &
+python run.py data/train.csv data/validate.csv data/validate.csv.results.uinf5 UserCfInf "[11,-0.0001]" &
 
-python run.py data/train.csv data/validate.csv data/validate.csv.results.ic1 ItemCf "[7,-1, 1.01]" &
-python run.py data/train.csv data/validate.csv data/validate.csv.results.ic2 ItemCf "[7,-1, 1.1]" &
-python run.py data/train.csv data/validate.csv data/validate.csv.results.ic3 ItemCf "[7,-1, 1.5]" &
-python run.py data/train.csv data/validate.csv data/validate.csv.results.ic4 ItemCf "[7,-1, 2]" &
-python run.py data/train.csv data/validate.csv data/validate.csv.results.ic5 ItemCf "[7,-1, 2.5]" &
+python run.py data/train.csv data/validate.csv data/validate.csv.results.iinf1 ItemCfInf "[7,-1]" &
+python run.py data/train.csv data/validate.csv data/validate.csv.results.iinf2 ItemCfInf "[7,-1]" &
+python run.py data/train.csv data/validate.csv data/validate.csv.results.iinf3 ItemCfInf "[7,-1]" &
+python run.py data/train.csv data/validate.csv data/validate.csv.results.iinf4 ItemCfInf "[7,-1]" &
+python run.py data/train.csv data/validate.csv data/validate.csv.results.iinf5 ItemCfInf "[7,-1]" &
 wait
