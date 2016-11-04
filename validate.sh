@@ -16,15 +16,21 @@
 # wait
 
 
-python run.py data/train.csv data/validate.csv data/validate.csv.results.uinf1 UserCfInf "[11,-0.0001]" &
-python run.py data/train.csv data/validate.csv data/validate.csv.results.uinf2 UserCfInf "[11,-0.0001]" &
-python run.py data/train.csv data/validate.csv data/validate.csv.results.uinf3 UserCfInf "[11,-0.0001]" &
-python run.py data/train.csv data/validate.csv data/validate.csv.results.uinf4 UserCfInf "[11,-0.0001]" &
-python run.py data/train.csv data/validate.csv data/validate.csv.results.uinf5 UserCfInf "[11,-0.0001]" &
+# python run.py data/train.csv data/validate.csv data/validate.csv.results.uinf1 UserCfInf "[11,-0.0001]" &
+# python run.py data/train.csv data/validate.csv data/validate.csv.results.iinf1 ItemCfInf "[7,-1]" &
+# wait
 
-python run.py data/train.csv data/validate.csv data/validate.csv.results.iinf1 ItemCfInf "[7,-1]" &
-python run.py data/train.csv data/validate.csv data/validate.csv.results.iinf2 ItemCfInf "[7,-1]" &
-python run.py data/train.csv data/validate.csv data/validate.csv.results.iinf3 ItemCfInf "[7,-1]" &
-python run.py data/train.csv data/validate.csv data/validate.csv.results.iinf4 ItemCfInf "[7,-1]" &
-python run.py data/train.csv data/validate.csv data/validate.csv.results.iinf5 ItemCfInf "[7,-1]" &
+python run.py data/train.csv data/validate.csv data/validate.csv.results.mf1 MF "[3, 0.1, 0]" &
+python run.py data/train.csv data/validate.csv data/validate.csv.results.mf2 MF "[5, 0.1, 0]" &
+python run.py data/train.csv data/validate.csv data/validate.csv.results.mf3 MF "[7, 0.1, 0]" &
+python run.py data/train.csv data/validate.csv data/validate.csv.results.mf4 MF "[9, 0.1, 0]" &
+python run.py data/train.csv data/validate.csv data/validate.csv.results.mf5 MF "[11, 0.1, 0]" &
+python run.py data/train.csv data/validate.csv data/validate.csv.results.mf6 MF "[13, 0.1, 0]" &
+python run.py data/train.csv data/validate.csv data/validate.csv.results.mf7 MF "[15, 0.1, 0]" &
+python run.py data/train.csv data/validate.csv data/validate.csv.results.mf8 MF "[17, 0.1, 0]" &
+python run.py data/train.csv data/validate.csv data/validate.csv.results.mf9 MF "[21, 0.1, 0]" &
+python run.py data/train.csv data/validate.csv data/validate.csv.results.mf10 MF "[27, 0.1, 0]" &
+python run.py data/train.csv data/validate.csv data/validate.csv.results.mf11 MF "[35, 0.1, 0]" &
+python run.py data/train.csv data/validate.csv data/validate.csv.results.mf12 MF "[43, 0.1, 0]" &
+python run.py data/train.csv data/validate.csv data/validate.csv.results.mf13 MF "[51, 0.1, 0]" &
 wait

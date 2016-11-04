@@ -8,11 +8,12 @@ class MF(BaseRecommender):
   def _recommend(self, question, user):
     return self.factorized[ self.user_index[user] ][ self.question_index[question] ]
 
-  def hyper_parameters(self, K, lb, IGNORED):
+  def hyper_parameters(self, K, lb, IGNORED, ca=1):
     # Hyper parameters
     self.K = K
     self.lb = lb
     self.IGNORED = IGNORED
+    self.ca = ca
     return self
 
 
