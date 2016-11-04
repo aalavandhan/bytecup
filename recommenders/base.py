@@ -36,7 +36,6 @@ class BaseRecommender:
     # Return a value from 0-1
     smoothen = lambda x: max(0, min(1, x))
     r = self._recommend(question,user)
-    print r
     return smoothen(r)
 
   def expand(self, df):
