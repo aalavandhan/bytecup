@@ -16,7 +16,7 @@ class BaseRecommender:
 
   def pearsoncorr(self, x,y):
     c = pearsonr(x, y)[ 0 ]
-    return (c ** self.ca) if not np.isnan(c) else 0
+    return c if not np.isnan(c) else 0
 
   def hyper_parameters(self, K=7, IGNORED=0.0001, ca=1):
     # Hyper parameters
@@ -36,7 +36,7 @@ class BaseRecommender:
     # Return a value from 0-1
     smoothen = lambda x: max(0, min(1, x))
     r = self._recommend(question,user)
-    return smoothen(r)
+    return smoothen(r) ** self.ca
 
   def expand(self, df):
     row  = [ ]
