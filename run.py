@@ -8,6 +8,8 @@ from recommenders.user_cf import UserCf
 from recommenders.item_cf import ItemCf
 from recommenders.mf      import MF
 
+from recommenders.user_cf_inf import UserCfInf
+
 from recommenders.io import *
 
 import sys

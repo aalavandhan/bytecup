@@ -1,5 +1,4 @@
 import numpy as np
-from scipy.stats import pearsonr
 from scipy.sparse import csr_matrix
 
 from base import BaseRecommender
@@ -7,7 +6,10 @@ from base import BaseRecommender
 class UserCf(BaseRecommender):
   def _recommend(self, question, user):
     # active user
-    active_user = np.array(self.rMatrix[self.user_index[user], :])[ 0 ]
+    active_user = {
+      'vector': np.array(self.rMatrix[self.user_index[user], :])[ 0 ],
+      'index' : self.user_index[user],
+    }
 
     # users who've been asked the question
     users = self.train_info[self.train_info.question_id == question]
@@ -17,12 +19,18 @@ class UserCf(BaseRecommender):
     user_indices = map(lambda u: self.user_index[u], users)
     user_vectors = np.array(self.rMatrix[user_indices, :])
 
-    correlation = map(lambda u: (self.pearsoncorr(active_user, u), u), user_vectors)
+    user_vectors = map(lambda (i, e): { 'vector': user_vectors[i], 'index': i }, enumerate( user_indices ))
+
+    correlation = map(lambda u: (self.similarity(active_user, u), u), user_vectors)
     closest_user_vectors = sorted(correlation, key=lambda x: x[0], reverse=True)
 
     top_k = self.topK(closest_user_vectors)
 
-    return active_user.mean() + self.prediction(top_k, self.question_index[question])
+    return active_user['vector'].mean() + self.prediction(top_k, self.question_index[question])
+
+
+  def similarity(self, active, current):
+    return self.pearsoncorr(active['vector'], current['vector'])
 
   def preprocess(self):
     BaseRecommender.preprocess(self)
@@ -34,7 +42,7 @@ class UserCf(BaseRecommender):
     return self
 
   def prediction(self, top_k, index):
-    weighted_sum = reduce(lambda m, u: m + ((u[1][index] - u[1].mean()) * u[0]), top_k, 0)
+    weighted_sum   = reduce(lambda m, u: m + ((u[1]['vector'][index] - u[1]['vector'].mean()) * u[0]), top_k, 0)
     sum_of_weights = reduce(lambda m, u: m + u[0], top_k, 0)
 
     if sum_of_weights == 0:

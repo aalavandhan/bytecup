@@ -15,12 +15,14 @@ class BaseRecommender:
     self.NUMBER_OF_QUESTIONS = NUMBER_OF_QUESTIONS
 
   def pearsoncorr(self, x,y):
-    return pearsonr(x, y)[ 0 ]
+    c = pearsonr(x, y)[ 0 ]
+    return (c ** self.ca) if not np.isnan(c) else 0
 
-  def hyper_parameters(self, K, IGNORED):
+  def hyper_parameters(self, K=7, IGNORED=0.0001, ca=1):
     # Hyper parameters
     self.K = K
     self.IGNORED = IGNORED
+    self.ca = ca
     return self
 
   def preprocess(self, leave_one_out=False):
@@ -34,6 +36,7 @@ class BaseRecommender:
     # Return a value from 0-1
     smoothen = lambda x: max(0, min(1, x))
     r = self._recommend(question,user)
+    print r
     return smoothen(r)
 
   def expand(self, df):
