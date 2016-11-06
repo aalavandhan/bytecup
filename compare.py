@@ -20,6 +20,4 @@ for q in est.keys():
   s = ndcg_at_k(recommendation, 5, method=1) * 0.5 + ndcg_at_k(recommendation, 10, method=1) * 0.5
   scores.append(s)
 
-print "NDCG SCORE : {0}%".format( np.array(scores).mean() * 100 )
-# MSE
-# print "MSE : {0}" .format( ((ip['answered'] - op['answered']) ** 2).mean() * 100 )
+print np.array(scores).mean() * 100

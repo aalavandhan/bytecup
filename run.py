@@ -11,6 +11,8 @@ from recommenders.mf      import MF
 from recommenders.user_cf_inf import UserCfInf
 from recommenders.item_cf_inf import ItemCfInf
 
+from recommenders.text_similarity import TextSimilarity
+
 from recommenders.io import *
 
 import sys
@@ -20,7 +22,11 @@ TEST_PATH      = sys.argv[2]
 OUTPUT_PATH    = sys.argv[3]
 
 REC_TYPE       = eval(sys.argv[4])
-ARGS           = eval(sys.argv[5])
+
+if(len(sys.argv) > 5):
+  ARGS         = eval(sys.argv[5])
+else:
+  ARGS         = "[]"
 
 user_info = pd.read_csv("data/user-features")
 question_info = pd.read_csv("data/question-features")

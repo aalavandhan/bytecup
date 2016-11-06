@@ -28,7 +28,9 @@ class BaseRecommender:
   def preprocess(self, leave_one_out=False):
     # Do some preprocessing
     # Setting value for ignored
-    self.train_info.ix[self.train_info.answered == 0, 'answered'] = self.IGNORED
+    if hasattr(self, 'IGNORED'):
+      self.train_info.ix[self.train_info.answered == 0, 'answered'] = self.IGNORED
+
     self.leave_one_out = leave_one_out
     return self
 
@@ -36,7 +38,13 @@ class BaseRecommender:
     # Return a value from 0-1
     smoothen = lambda x: max(0, min(1, x))
     r = self._recommend(question,user)
-    return smoothen(r) ** self.ca
+
+    if hasattr(self, 'ca'):
+      pw = self.ca
+    else:
+      pw = 1
+
+    return smoothen(r) ** pw
 
   def expand(self, df):
     row  = [ ]
