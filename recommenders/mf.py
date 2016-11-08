@@ -16,16 +16,22 @@ class MF(BaseRecommender):
     self.ca = ca
     return self
 
-
-  def preprocess(self):
+  def base_preprocess(self):
     BaseRecommender.preprocess(self)
 
-    # Setting value for ignored
-    (row, col, data) = self.expand(self.train_info)
-    V = scipy.sparse.csr_matrix((data, (row, col)))
-    model = libpmf.train(V, '-k {0} -l {1} -t {0}'.format(self.K, self.lb))
 
+  def factorize(self, V):
+    model = libpmf.train(V, '-k {0} -l {1} -t {0}'.format(self.K, self.lb))
     self.factorized = np.dot( model['W'], model['H'].transpose() )
+
+
+  def sparse(self, d):
+    return scipy.sparse.csr_matrix(d)
+
+  def preprocess(self):
+    self.base_preprocess()
+    V = self.sparse(self.expand(self.train_info))
+    self.factorize(V)
 
     return self
 

@@ -1,35 +1,35 @@
 import numpy as np
+import pandas as pd
 from mf import MF
+from sklearn.neighbors import BallTree as BallTree
 
 class MFImp(MF):
-  def impute(self, train_data):
-    td = train_data.copy()
-
-    cold_start = self.user_info[ self.user_info.asked == 0 ]
-    warm_start = self.user_info[ self.user_info.asked != 0 ]
-
-    import pdb
-    pdb.set_trace()
-
-    return td
+  def impute(self, uqMatrix):
+    # Updating Cold starts
+    for idx, u in self.cold_start.iterrows():
+      dists, ids = self.BT.query(self.warm_start[idx, :], k=self.limit)
+      uqMatrix[idx, :] = np.amax(uqMatrix[ids[ 0 ], :], axis=0)
+    return uqMatrix
 
 
   def hyper_parameters(self, K, lb, IGNORED, range=0.01, ca=1):
     # Hyper parameters
-    self.K = K
-    self.lb = lb
-    self.IGNORED = IGNORED
+    MF.hyper_parameters(self, K, lb, IGNORED, ca)
     self.range = range
-    self.ca = ca
     return self
 
   def preprocess(self):
-    # Generate user similarity matrix
-    self.user_similarity = np.identity(self.NUMBER_OF_USERS)
-    for i in range(self.NUMBER_OF_USERS):
-      self.user_similarity[i,:] = self.user_info.apply(lambda u: self.pearsoncorr(u[self.user_features], self.user_info.ix[i][self.user_features]), axis=1)
+    self.base_preprocess()
+    self.warm_start = self.user_info[self.user_features].as_matrix()
+    self.cold_start = self.user_info[ self.user_info.asked == 0 ]
+    self.limit = int( len(self.warm_start) * self.range )
+    self.BT = BallTree(self.warm_start, leaf_size=self.limit+1, p=2)
 
 
-    self.train_info = self.impute(self.train_info)
-    MF.preprocess(self)
+    self.uqMatrix = self.impute(
+      np.matrix(self.sparse(self.expand(self.train_info)).toarray())
+    )
+
+    self.factorize( self.sparse(self.uqMatrix) )
+
     return self

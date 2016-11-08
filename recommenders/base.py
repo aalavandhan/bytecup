@@ -73,7 +73,7 @@ class BaseRecommender:
       row.append(self.user_index[r['user_id']])
       col.append(self.question_index[r['question_id']])
       data.append(r['answered'])
-    return (row, col, data)
+    return (data, (row, col))
 
 
 
