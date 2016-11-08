@@ -7,11 +7,13 @@ from scipy.stats import pearsonr
 from recommenders.user_cf import UserCf
 from recommenders.item_cf import ItemCf
 from recommenders.mf      import MF
+from recommenders.mf_imp  import MFImp
 
 from recommenders.user_cf_inf import UserCfInf
 from recommenders.item_cf_inf import ItemCfInf
 
 from recommenders.text_similarity import TextSimilarity
+from recommenders.tag_rule        import TagRule
 
 from recommenders.io import *
 
