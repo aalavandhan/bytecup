@@ -2,6 +2,7 @@ import numpy as np
 from scipy.sparse import csr_matrix
 
 from base import BaseRecommender
+from sklearn.neighbors import NearestNeighbors
 
 class UserCf(BaseRecommender):
   def _recommend(self, question, user):
@@ -15,18 +16,21 @@ class UserCf(BaseRecommender):
     users = self.train_info[self.train_info.question_id == question]
     # users who've answered this question
     users = users[users.answered == 1]['user_id']
-
     user_indices = map(lambda u: self.user_index[u], users)
-    user_vectors = np.array(self.rMatrix[user_indices, :])
 
-    user_vectors = map(lambda (i, e): { 'vector': user_vectors[i], 'index': i }, enumerate( user_indices ))
 
-    correlation = map(lambda u: (self.similarity(active_user, u), u), user_vectors)
-    closest_user_vectors = sorted(correlation, key=lambda x: x[0], reverse=True)
+    uM = self.rMatrix[user_indices, :]
+    aU = self.rMatrix[ self.user_index[user], : ]
+    k = min(self.K, len(uM))
 
-    top_k = self.topK(closest_user_vectors)
+    if k == 0:
+      return 0
 
-    return active_user['vector'].mean() + self.prediction(top_k, self.question_index[question])
+    kNN = NearestNeighbors(n_neighbors=k, algorithm='auto').fit(uM)
+    distances, indics = kNN.kneighbors(aU)
+    top_k = uM[indics,:]
+
+    return active_user['vector'].mean() + self.prediction(top_k[ 0 ], distances[ 0 ], self.question_index[question])
 
 
   def similarity(self, active, current):
@@ -34,27 +38,20 @@ class UserCf(BaseRecommender):
 
   def preprocess(self):
     BaseRecommender.preprocess(self)
-
-    (row, col, data) = self.expand(self.train_info)
-    V = csr_matrix((data, (row, col)))
+    V = csr_matrix(self.expand(self.train_info))
     self.rMatrix = V.todense()
 
     return self
 
-  def prediction(self, top_k, index):
-    weighted_sum   = reduce(lambda m, u: m + ((u[1]['vector'][index] - u[1]['vector'].mean()) * u[0]), top_k, 0)
-    sum_of_weights = reduce(lambda m, u: m + u[0], top_k, 0)
+  def prediction(self, top_k, distances, index):
+    idx = range(len(top_k))
+    common = np.array( top_k[:, index] )[ 0 ] - np.array( top_k[:, ].mean(axis=1) )[ 0 ]
+    weighted_sum = (common * distances).sum()
+    sum_of_weights = distances.sum()
 
+
+    # Handling this error
     if sum_of_weights == 0:
       return 0
 
     return weighted_sum / sum_of_weights
-
-
-  def topK(self, closest):
-    if not self.leave_one_out:
-      top_k = closest[ :self.K ]
-    else:
-      top_k = closest[ 1:self.K+1 ]
-
-    return top_k

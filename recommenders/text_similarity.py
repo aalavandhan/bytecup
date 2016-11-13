@@ -18,9 +18,11 @@ class TextSimilarity(BaseRecommender):
     char_sim = self.similarity(set(s1), set(s2))
     word_sim = self.similarity(set(s3), set(s4))
 
-    return (char_sim + word_sim)/2
+    return word_sim
+    # return char_sim
+    # return (char_sim + word_sim)/2
 
-  def preprocess(self, wTresh, cTresh):
+  def preprocess(self):
     BaseRecommender.preprocess(self)
 
     self.qWord = pd.DataFrame.from_csv("data/question-word", header=None, index_col=None)
@@ -31,9 +33,6 @@ class TextSimilarity(BaseRecommender):
     self.uWord.columns=['user_id', 'word_id']
     self.uChar = pd.DataFrame.from_csv("data/user-char", header=None, index_col=None)
     self.uChar.columns=['user_id', 'char_id']
-
-    self.wTresh = wTresh
-    self.cTresh = cTresh
 
 
   def similarity(self, v1, v2):

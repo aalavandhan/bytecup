@@ -21,6 +21,13 @@ class BaseRecommender:
     self.user_info['asked']    =  self.user_info['asked'].fillna(0)
 
 
+    self.question_info['ease'] = ( self.question_info['answers'] - self.question_info['answers'].min()  ) / self.question_info['answers'].max()
+    self.question_info['popularity'] = ( self.question_info['top_answers'] - self.question_info['top_answers'].min() ) / self.question_info['top_answers'].max()
+    self.question_info['votability'] = ( self.question_info['upvotes'] - self.question_info['upvotes'].min() ) / self.question_info['upvotes'].max()
+    self.question_info['nTag'] = ( self.question_info['tag'] - self.question_info['tag'].min() ) / self.question_info['tag'].max()
+    self.question_info['answerability'] = ( self.question_info['top_answers'] / self.question_info['answers'] )
+    self.question_info['answerability'] =  self.question_info['answerability'].fillna(0)
+
     answered = self.train_info[ self.train_info.answered == 1 ].groupby('question_id').count()['answered']
     asked = self.train_info.groupby('question_id').count()['answered'].rename('asked')
     self.question_info = self.question_info.join(answered, on="question_id", how="left" ).join(asked, on="question_id", how="left")
@@ -31,6 +38,16 @@ class BaseRecommender:
       "w1", "w2", "w3", "w4", "w5", "w6", "w7", "w8", "w9", "w10",
       "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10",
       "t1", "t2", "t3", "t4", "t5",
+    ]
+
+    self.question_features = [
+      #   "tag", "upvotes", "answers", "top_answers",'answerability',
+      'nTag', 'votability', 'ease', 'popularity', 'answerability',
+      'wq1', 'wq2', 'wq3', 'wq4', 'wq5', 'wq6', 'wq7', 'wq8', 'wq9', 'wq10',
+      'cq1', 'cq2','cq3', 'cq4', 'cq5', 'cq6', 'cq7', 'cq8', 'cq9', 'cq10',
+      't1', 't2', 't3', 't4', 't5',
+      'w1', 'w2', 'w3', 'w4', 'w5', 'w6', 'w7', 'w8', 'w9', 'w10',
+      'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'c10'
     ]
 
   def pearsoncorr(self, x,y):
