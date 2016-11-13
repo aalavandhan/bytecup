@@ -13,7 +13,7 @@ def generate_ndcg_scores(TRUTH, EST):
     recommended = sorted(est[q].keys(), key=lambda u: est[q][u], reverse=True)
     recommendation = map(lambda u: int(truth[q][u]),recommended)
 
-    if len(recommendation) < 10 and not any(recommendation):
+    if not any(recommendation):
       pass
     else:
       s = ndcg_at_k(recommendation, 5, method=1) * 0.5 + ndcg_at_k(recommendation, 10, method=1) * 0.5
