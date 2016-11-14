@@ -54,10 +54,12 @@ class BaseRecommender:
     c = pearsonr(x, y)[ 0 ]
     return c if not np.isnan(c) else 0
 
-  def hyper_parameters(self, K=7, IGNORED=0.0001, ca=1):
+  def hyper_parameters(self, K=7, IGNORED=0.0001, distance='euclidean', ca=1):
     # Hyper parameters
     self.K = K
     self.IGNORED = IGNORED
+    self.distance = distance
+    self.kType = self.knnType(distance)
     self.ca = ca
     return self
 
@@ -81,6 +83,12 @@ class BaseRecommender:
       pw = 1
 
     return smoothen(r) ** pw
+
+  def knnType(self, distance):
+    if distance == "cosine":
+      return "brute"
+    else:
+      return "auto"
 
   def expand(self, df):
     row  = [ ]

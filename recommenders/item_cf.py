@@ -2,28 +2,38 @@ import numpy as np
 from scipy.stats import pearsonr
 
 from user_cf import UserCf
+from sklearn.neighbors import NearestNeighbors
 
 class ItemCf(UserCf):
   def _recommend(self, question, user):
     # active question
     active_question = {
-        'vector': np.array( self.rMatrix[:, self.question_index[question]].transpose() )[ 0 ],
-        'index': self.question_index[question],
+      'vector': np.array( self.rMatrix[:, self.question_index[question]].transpose() )[ 0 ],
+      'index': self.question_index[question],
     }
 
     # Questions the user has been asked
     questions = self.train_info[self.train_info.user_id == user]
     # Questions the user has answered
     questions = questions[questions.answered == 1]['question_id']
-
     question_indices = map(lambda q: self.question_index[q], questions)
-    question_vectors = np.array( self.rMatrix[:, question_indices].transpose() )
 
-    question_vectors = map(lambda (i, e): { 'vector': question_vectors[i], 'index': i }, enumerate( question_indices ))
 
-    correlation = map(lambda q: (self.similarity(active_question, q), q), question_vectors)
-    closest_question_vectors = sorted(correlation, key=lambda x: x[0], reverse=True)
+    uM = self.rMatrix[question_indices, :]
+    aU = self.rMatrix[ self.question_index[question], : ]
+    k = min(self.K, len(uM))
 
-    top_k = self.topK(closest_question_vectors)
+    if k == 0:
+      return 0
 
-    return active_question['vector'].mean() + self.prediction(top_k, self.user_index[user])
+    kNN = NearestNeighbors(n_neighbors=k, algorithm=self.kType, metric=self.distance).fit(uM)
+    distances, indics = kNN.kneighbors(aU)
+    top_k = uM[indics,:]
+
+    return active_question['vector'].mean() + self.prediction(top_k[ 0 ], distances[ 0 ], self.user_index[user])
+
+
+  def preprocess(self):
+    UserCf.preprocess(self)
+    self.rMatrix = self.rMatrix.transpose()
+    return self

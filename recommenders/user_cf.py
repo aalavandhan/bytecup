@@ -26,7 +26,7 @@ class UserCf(BaseRecommender):
     if k == 0:
       return 0
 
-    kNN = NearestNeighbors(n_neighbors=k, algorithm='auto').fit(uM)
+    kNN = NearestNeighbors(n_neighbors=k, algorithm=self.kType, metric=self.distance).fit(uM)
     distances, indics = kNN.kneighbors(aU)
     top_k = uM[indics,:]
 
