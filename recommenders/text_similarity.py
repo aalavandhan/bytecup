@@ -18,9 +18,11 @@ class TextSimilarity(BaseRecommender):
     char_sim = self.similarity(set(s1), set(s2))
     word_sim = self.similarity(set(s3), set(s4))
 
-    return word_sim
-    # return char_sim
-    # return (char_sim + word_sim)/2
+    if self.type == "word":
+        return word_sim
+    else:
+        return char_sim
+
 
   def preprocess(self):
     BaseRecommender.preprocess(self)
@@ -39,3 +41,9 @@ class TextSimilarity(BaseRecommender):
     u = v1.union(v2)
     i = v1.intersection(v2)
     return float( len(i) ) / len(u)
+
+  def hyper_parameters(self, type='word', ca=1):
+    # Hyper parameters
+    self.type = type
+    self.ca = ca
+    return self

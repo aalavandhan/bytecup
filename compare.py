@@ -12,5 +12,5 @@ results = generate_ndcg_scores(TRUTH, EST)
 scores  = map(lambda s: s[0], results)
 
 print np.array(scores).mean() * 100
-plt.hist(scores, bins=10)
-plt.show()
+# plt.hist(scores, bins=10)
+# plt.show()
