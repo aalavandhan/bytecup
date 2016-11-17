@@ -1,17 +1,36 @@
-python run.py data/invited_info_train.txt ip/xaa &
-python run.py data/invited_info_train.txt ip/xab &
-python run.py data/invited_info_train.txt ip/xac &
-python run.py data/invited_info_train.txt ip/xad &
-python run.py data/invited_info_train.txt ip/xae &
-python run.py data/invited_info_train.txt ip/xaf &
-python run.py data/invited_info_train.txt ip/xag &
-python run.py data/invited_info_train.txt ip/xah &
-python run.py data/invited_info_train.txt ip/xai &
-python run.py data/invited_info_train.txt ip/xaj &
-python run.py data/invited_info_train.txt ip/xak &
-python run.py data/invited_info_train.txt ip/xal &
-python run.py data/invited_info_train.txt ip/xam &
-python run.py data/invited_info_train.txt ip/xan &
-python run.py data/invited_info_train.txt ip/xao &
-wait
-cat ip/xaa.results ip/xab.results ip/xac.results ip/xad.results ip/xae.results ip/xaf.results ip/xag.results ip/xah.results ip/xai.results ip/xaj.results ip/xak.results ip/xal.results ip/xam.results ip/xan.results ip/xao.results > results.csv
+python feature_reduction.py uT 1 0.1 >> result
+python feature_reduction.py uT 3 0.1 >> result
+python feature_reduction.py uT 5 0.1 >> result
+python feature_reduction.py uT 7 0.1 >> result
+python feature_reduction.py uT 9 0.1 >> result
+python feature_reduction.py uT 11 0.1 >> result
+python feature_reduction.py uT 13 0.1 >> result
+python feature_reduction.py uT 15 0.1 >> result
+python feature_reduction.py uT 17 0.1 >> result
+python feature_reduction.py uT 19 0.1 >> result
+python feature_reduction.py uT 21 0.1 >> result
+python feature_reduction.py uT 23 0.1 >> result
+python feature_reduction.py uT 25 0.1 >> result
+python feature_reduction.py uT 27 0.1 >> result
+python feature_reduction.py uT 29 0.1 >> result
+python feature_reduction.py uT 31 0.1 >> result
+python feature_reduction.py uT 33 0.1 >> result
+python feature_reduction.py uT 35 0.1 >> result
+python feature_reduction.py uT 37 0.1 >> result
+python feature_reduction.py uT 39 0.1 >> result
+python feature_reduction.py uT 41 0.1 >> result
+python feature_reduction.py uT 43 0.1 >> result
+python feature_reduction.py uT 45 0.1 >> result
+python feature_reduction.py uT 47 0.1 >> result
+python feature_reduction.py uT 49 0.1 >> result
+python feature_reduction.py uT 51 0.1 >> result
+python feature_reduction.py uT 53 0.1 >> result
+python feature_reduction.py uT 55 0.1 >> result
+python feature_reduction.py uT 57 0.1 >> result
+python feature_reduction.py uT 59 0.1 >> result
+python feature_reduction.py uT 61 0.1 >> result
+python feature_reduction.py uT 63 0.1 >> result
+python feature_reduction.py uT 65 0.1 >> result
+python feature_reduction.py uT 67 0.1 >> result
+python feature_reduction.py uT 69 0.1 >> result
+python feature_reduction.py uT 71 0.1 >> result

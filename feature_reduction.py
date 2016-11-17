@@ -36,7 +36,7 @@ if TYPE == "uC":
 if TYPE == "uT":
   data  = vctorizer.fit_transform(user_info['expert_tags'])
 
-model = libpmf.train(data, '-k {0} -l {1} -t {0} -t 5000'.format(K, lb))
+model = libpmf.train(data, '-k {0} -l {1} -t 5000'.format(K, lb))
 
 dMAtrix = data.todense()
 factorized = np.dot( model['W'], model['H'].transpose() )

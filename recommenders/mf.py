@@ -21,7 +21,7 @@ class MF(BaseRecommender):
 
 
   def factorize(self, V):
-    model = libpmf.train(V, '-k {0} -l {1} -t {0}'.format(self.K, self.lb))
+    model = libpmf.train(V, '-k {0} -l {1} -t 5000'.format(self.K, self.lb))
     self.factorized = np.dot( model['W'], model['H'].transpose() )
 
 

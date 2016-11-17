@@ -1,13 +1,14 @@
 Best cases
 
 ITEM CF K : 7, IGNORED = -1 -> 0.368
-USER CF K : 11, IGNORED = { 0 , -0.001 } -> 0.419
+[7, 0, 'hamming'] -> 0.3845
 
+USER CF K : 11, IGNORED = { 0 , -0.001 } -> 0.419
+[11, -0.001, 'euclidean']
 
 # No significant improvement
 Case amplification: 1 produces the max
 USER With INF: 0.418
-
 
 # MF
 Best K = 27, lb = 0.1, ignored = 0  -> ( 0.4827 )
