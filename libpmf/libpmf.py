@@ -5,6 +5,7 @@ from os import path
 
 libpmf = CDLL(path.join(path.dirname(__file__),'pmf_py.so.1'))
 
+
 def genFields(names, types): 
 	return list(zip(names, types))
 
