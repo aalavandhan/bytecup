@@ -101,85 +101,32 @@ def MF(d, column, f1, f2, k=5):
     writeResults(f1, model['W'])
     writeResults(f2, model['H'])
 
-MF(user_info, "expert_tags", 'user-expert-latent', 'expert-user-latent', 10)
-MF(user_info, "word_id", 'user-word-latent', 'word-user-latent', 51)
-MF(user_info, "char_id", 'user-char-latent', 'char-user-latent', 51)
-MF(question_info, "word_id", 'question-word-latent', 'word-question-latent', 51)
-MF(question_info, "char_id", 'question-char-latent', 'char-question-latent', 51)
+MF(user_info, "expert_tags", 'user-expert-latent', 'expert-user-latent', 34)
+MF(user_info, "word_id", 'user-word-latent', 'word-user-latent', 2858)
+MF(user_info, "char_id", 'user-char-latent', 'char-user-latent', 739)
+MF(question_info, "word_id", 'question-word-latent', 'word-question-latent', 3265)
+MF(question_info, "char_id", 'question-char-latent', 'char-question-latent', 434)
 
 
-question_word_latent = pd.read_csv("data/question-word-latent", sep=",", header=None, names=[
-    "wa1", "wa2", "wa3", "wa4", "wa5", "wa6", "wa7", "wa8", "wa9", "wa10",
-    "wb1", "wb2", "wb3", "wb4", "wb5", "wb6", "wb7", "wb8", "wb9", "wb10",
-    "wc1", "wc2", "wc3", "wc4", "wc5", "wc6", "wc7", "wc8", "wc9", "wc10",
-    "wd1", "wd2", "wd3", "wd4", "wd5", "wd6", "wd7", "wd8", "wd9", "wd10",
-    "we1", "we2", "we3", "we4", "we5", "we6", "we7", "we8", "we9", "we10",
-    "wf1",
-])
-question_char_latent = pd.read_csv("data/question-char-latent", sep=",", header=None, names=[
-    "ca1", "ca2", "ca3", "ca4", "ca5", "ca6", "ca7", "ca8", "ca9", "ca10",
-    "cb1", "cb2", "cb3", "cb4", "cb5", "cb6", "cb7", "cb8", "cb9", "cb10",
-    "cc1", "cc2", "cc3", "cc4", "cc5", "cc6", "cc7", "cc8", "cc9", "cc10",
-    "cd1", "cd2", "cd3", "cd4", "cd5", "cd6", "cd7", "cd8", "cd9", "cd10",
-    "ce1", "ce2", "ce3", "ce4", "ce5", "ce6", "ce7", "ce8", "ce9", "ce10",
-    "cf1",
-])
+question_word_latent = pd.read_csv("data/question-word-latent", sep=",", header=None)
+question_word_latent.columns = map(lambda c: "qw" + c, range(len(question_word_latent.columns)))
+
+question_char_latent = pd.read_csv("data/question-char-latent", sep=",", header=None)
+question_char_latent.columns = map(lambda c: "qc" + c, range(len(question_char_latent.columns)))
+
 question_info = pd.concat([question_info, question_word_latent, question_char_latent], axis=1, join_axes=[question_info.index])
 
-user_word_latent = pd.read_csv("data/user-word-latent", sep=",", header=None, names=[
-    "wua1", "wua2", "wua3", "wua4", "wua5", "wua6", "wua7", "wua8", "wua9", "wua10",
-    "wub1", "wub2", "wub3", "wub4", "wub5", "wub6", "wub7", "wub8", "wub9", "wub10",
-    "wuc1", "wuc2", "wuc3", "wuc4", "wuc5", "wuc6", "wuc7", "wuc8", "wuc9", "wuc10",
-    "wud1", "wud2", "wud3", "wud4", "wud5", "wud6", "wud7", "wud8", "wud9", "wud10",
-    "wue1", "wue2", "wue3", "wue4", "wue5", "wue6", "wue7", "wue8", "wue9", "wue10",
-    "wuf1",
-])
-user_char_latent = pd.read_csv("data/user-char-latent", sep=",", header=None, names=[
-    "cua1", "cua2", "cua3", "cua4", "cua5", "cua6", "cua7", "cua8", "cua9", "cua10",
-    "cub1", "cub2", "cub3", "cub4", "cub5", "cub6", "cub7", "cub8", "cub9", "cub10",
-    "cuc1", "cuc2", "cuc3", "cuc4", "cuc5", "cuc6", "cuc7", "cuc8", "cuc9", "cuc10",
-    "cud1", "cud2", "cud3", "cud4", "cud5", "cud6", "cud7", "cud8", "cud9", "cud10",
-    "cue1", "cue2", "cue3", "cue4", "cue5", "cue6", "cue7", "cue8", "cue9", "cue10",
-    "cuf1",
-])
-user_expert_latent = pd.read_csv("data/user-expert-latent", sep=",", header=None, names=[
-    "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10",
-    "t11", "t12", "t13", "t14", "t15",
-])
+user_word_latent = pd.read_csv("data/user-word-latent", sep=",", header=None)
+user_word_latent.columns = map(lambda c: "uw" + c, range(len(user_word_latent.columns)))
+
+user_char_latent = pd.read_csv("data/user-char-latent", sep=",", header=None)
+user_char_latent.columns = map(lambda c: "uc" + c, range(len(user_char_latent.columns)))
+
+user_expert_latent = pd.read_csv("data/user-expert-latent", sep=",", header=None)
+user_expert_latent.columns = map(lambda c: "ut" + c, range(len(user_expert_latent.columns)))
+
 user_info = pd.concat([user_info, user_word_latent, user_char_latent, user_expert_latent], axis=1, join_axes=[user_info.index])
 
 
-user_info.to_csv("data/user-features", sep=",", columns=[
-    "user_id",
-    "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10",
-    "t11", "t12", "t13", "t14", "t15",
-    "wua1", "wua2", "wua3", "wua4", "wua5", "wua6", "wua7", "wua8", "wua9", "wua10",
-    "wub1", "wub2", "wub3", "wub4", "wub5", "wub6", "wub7", "wub8", "wub9", "wub10",
-    "wuc1", "wuc2", "wuc3", "wuc4", "wuc5", "wuc6", "wuc7", "wuc8", "wuc9", "wuc10",
-    "wud1", "wud2", "wud3", "wud4", "wud5", "wud6", "wud7", "wud8", "wud9", "wud10",
-    "wue1", "wue2", "wue3", "wue4", "wue5", "wue6", "wue7", "wue8", "wue9", "wue10",
-    "wuf1",
-    "cua1", "cua2", "cua3", "cua4", "cua5", "cua6", "cua7", "cua8", "cua9", "cua10",
-    "cub1", "cub2", "cub3", "cub4", "cub5", "cub6", "cub7", "cub8", "cub9", "cub10",
-    "cuc1", "cuc2", "cuc3", "cuc4", "cuc5", "cuc6", "cuc7", "cuc8", "cuc9", "cuc10",
-    "cud1", "cud2", "cud3", "cud4", "cud5", "cud6", "cud7", "cud8", "cud9", "cud10",
-    "cue1", "cue2", "cue3", "cue4", "cue5", "cue6", "cue7", "cue8", "cue9", "cue10",
-    "cuf1",
-])
-question_info.to_csv("data/question-features", sep=",", columns=[
-    "question_id",
-    "tag", "upvotes", "answers", "top_answers",
-    "nTag", "votability", "ease", "popularity", "answerability",
-    "wa1", "wa2", "wa3", "wa4", "wa5", "wa6", "wa7", "wa8", "wa9", "wa10",
-    "wb1", "wb2", "wb3", "wb4", "wb5", "wb6", "wb7", "wb8", "wb9", "wb10",
-    "wc1", "wc2", "wc3", "wc4", "wc5", "wc6", "wc7", "wc8", "wc9", "wc10",
-    "wd1", "wd2", "wd3", "wd4", "wd5", "wd6", "wd7", "wd8", "wd9", "wd10",
-    "we1", "we2", "we3", "we4", "we5", "we6", "we7", "we8", "we9", "we10",
-    "wf1",
-    "ca1", "ca2", "ca3", "ca4", "ca5", "ca6", "ca7", "ca8", "ca9", "ca10",
-    "cb1", "cb2", "cb3", "cb4", "cb5", "cb6", "cb7", "cb8", "cb9", "cb10",
-    "cc1", "cc2", "cc3", "cc4", "cc5", "cc6", "cc7", "cc8", "cc9", "cc10",
-    "cd1", "cd2", "cd3", "cd4", "cd5", "cd6", "cd7", "cd8", "cd9", "cd10",
-    "ce1", "ce2", "ce3", "ce4", "ce5", "ce6", "ce7", "ce8", "ce9", "ce10",
-    "cf1",
-])
+user_info.to_csv("data/user-features", sep=",", columns=["user_id"] + user_word_latent.columns + user_char_latent.columns + user_expert_latent.columns)
+question_info.to_csv("data/question-features", sep=",", columns=[ "question_id", "tag", "upvotes", "answers", "top_answers" ] + question_word_latent.columns + question_char_latent.columns)

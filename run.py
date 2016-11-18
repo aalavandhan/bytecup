@@ -9,6 +9,8 @@ from recommenders.item_cf import ItemCf
 from recommenders.mf      import MF
 from recommenders.mf_imp  import MFImp
 
+from recommenders.mf_glab  import MFGLab
+
 from recommenders.user_cf_inf import UserCfInf
 from recommenders.item_cf_inf import ItemCfInf
 
