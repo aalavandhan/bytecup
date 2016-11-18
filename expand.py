@@ -111,21 +111,21 @@ MF(question_info, "char_id", 'question-char-latent', 'char-question-latent', 434
 
 
 question_word_latent = pd.read_csv("data/question-word-latent", sep=",", header=None)
-question_word_latent.columns = map(lambda c: "qw" + c, range(len(question_word_latent.columns)))
+question_word_latent.columns = map(lambda c: "qw" + str(c), range(len(question_word_latent.columns)))
 
 question_char_latent = pd.read_csv("data/question-char-latent", sep=",", header=None)
-question_char_latent.columns = map(lambda c: "qc" + c, range(len(question_char_latent.columns)))
+question_char_latent.columns = map(lambda c: "qc" + str(c), range(len(question_char_latent.columns)))
 
 question_info = pd.concat([question_info, question_word_latent, question_char_latent], axis=1, join_axes=[question_info.index])
 
 user_word_latent = pd.read_csv("data/user-word-latent", sep=",", header=None)
-user_word_latent.columns = map(lambda c: "uw" + c, range(len(user_word_latent.columns)))
+user_word_latent.columns = map(lambda c: "uw" + str(c), range(len(user_word_latent.columns)))
 
 user_char_latent = pd.read_csv("data/user-char-latent", sep=",", header=None)
-user_char_latent.columns = map(lambda c: "uc" + c, range(len(user_char_latent.columns)))
+user_char_latent.columns = map(lambda c: "uc" + str(c), range(len(user_char_latent.columns)))
 
 user_expert_latent = pd.read_csv("data/user-expert-latent", sep=",", header=None)
-user_expert_latent.columns = map(lambda c: "ut" + c, range(len(user_expert_latent.columns)))
+user_expert_latent.columns = map(lambda c: "ut" + str(c), range(len(user_expert_latent.columns)))
 
 user_info = pd.concat([user_info, user_word_latent, user_char_latent, user_expert_latent], axis=1, join_axes=[user_info.index])
 
