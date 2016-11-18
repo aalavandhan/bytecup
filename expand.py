@@ -5,6 +5,8 @@ import scipy
 import libpmf.libpmf as libpmf
 from scipy import sparse
 
+from sklearn.feature_extraction.text import CountVectorizer
+
 user_info = pd.read_csv("data/user_info.txt", sep="\t", header=None, names=[
     "user_id", "expert_tags", "word_id", "char_id"
 ])
@@ -97,7 +99,7 @@ def writeResults(fileName, data):
 def MF(d, column, f1, f2, k=5):
     (row, col, data) = vectorize(d, column)
     V = scipy.sparse.csr_matrix((data, (row, col)))
-    model = libpmf.train(V, '-k {0} -l 0.1 -t {0}'.format(k))
+    model = libpmf.train(V, '-k {0} -l 0.1'.format(k))
     writeResults(f1, model['W'])
     writeResults(f2, model['H'])
 
