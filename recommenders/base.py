@@ -34,21 +34,8 @@ class BaseRecommender:
     self.question_info['answered'] =  self.question_info['answered'].fillna(0)
     self.question_info['asked']    =  self.question_info['asked'].fillna(0)
 
-    self.user_features = [
-      # "w1", "w2", "w3", "w4", "w5", "w6", "w7", "w8", "w9", "w10",
-      # "c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "c10",
-      # "t1", "t2", "t3", "t4", "t5",
-    ]
-
-    self.question_features = [
-      #   "tag", "upvotes", "answers", "top_answers",'answerability',
-      # 'nTag', 'votability', 'ease', 'popularity', 'answerability',
-      # 'wq1', 'wq2', 'wq3', 'wq4', 'wq5', 'wq6', 'wq7', 'wq8', 'wq9', 'wq10',
-      # 'cq1', 'cq2','cq3', 'cq4', 'cq5', 'cq6', 'cq7', 'cq8', 'cq9', 'cq10',
-      # 't1', 't2', 't3', 't4', 't5',
-      # 'w1', 'w2', 'w3', 'w4', 'w5', 'w6', 'w7', 'w8', 'w9', 'w10',
-      # 'c1', 'c2', 'c3', 'c4', 'c5', 'c6', 'c7', 'c8', 'c9', 'c10'
-    ]
+    self.user_features = [ ]
+    self.question_features = [ ]
 
   def pearsoncorr(self, x,y):
     c = pearsonr(x, y)[ 0 ]

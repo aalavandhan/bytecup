@@ -1,9 +1,12 @@
 import numpy as np
+import pandas as pd
 import sys
 
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
+# plt.style.use('ggplot')
 
 from util.eval import generate_ndcg_scores
+
 
 TRUTH   = sys.argv[1]
 EST     = sys.argv[2]

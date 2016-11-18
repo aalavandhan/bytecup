@@ -13,7 +13,6 @@ def generate_ndcg_scores(TRUTH, EST):
     recommended = sorted(est[q].keys(), key=lambda u: est[q][u], reverse=True)
     recommendation = map(lambda u: int(truth[q][u]),recommended)
 
-    # not any(recommendation)
     # if not any(recommendation):
     #   pass
     # else:
