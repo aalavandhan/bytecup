@@ -12,7 +12,7 @@ r = generate_ndcg_scores(TRUTH, MODELS[0])
 compare = map(lambda m: generate_ndcg_scores(TRUTH, m), MODELS[1:])
 
 # GOOD
-correct = lambda s: s[0] > 0.5
+correct = lambda s: s[0] > 0.75
 base_correct  = filter(correct, r)
 
 valid = set(base_correct)

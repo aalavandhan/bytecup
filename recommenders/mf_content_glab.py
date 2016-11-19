@@ -21,10 +21,20 @@ class MFContentGLab(MFGLab):
     })
     user_info = graphlab.SFrame(uFeatures)
 
-    self.recommender = graphlab.ranking_factorization_recommender.create(trainFrame,
-      target='rating',
-      regularization=self.lb,
-      unobserved_rating_value=0.25)
+    if self.type == 0:
+      self.recommender = graphlab.ranking_factorization_recommender.create(trainFrame,
+        target='rating',
+        regularization=self.lb,
+        unobserved_rating_value=0.25)
+    elif self.type == 1:
+      self.recommender = graphlab.factorization_recommender.create(trainFrame,
+        target='rating',
+        regularization=self.lb)
+    elif self.type == 2:
+      self.recommender = graphlab.popularity_recommender.create(trainFrame,
+        target='rating',
+        regularization=self.lb)
+
     testFrame = graphlab.SFrame({
       'user_id': self.test_info['user_id'].tolist(),
       'item_id': self.test_info['question_id'].tolist(),
