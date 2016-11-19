@@ -21,7 +21,10 @@ class MFContentGLab(MFGLab):
     })
     user_info = graphlab.SFrame(uFeatures)
 
-    self.recommender = graphlab.ranking_factorization_recommender.create(trainFrame, target='rating')
+    self.recommender = graphlab.ranking_factorization_recommender.create(trainFrame,
+      target='rating',
+      regularization=self.lb,
+      unobserved_rating_value=0.25)
     testFrame = graphlab.SFrame({
       'user_id': self.test_info['user_id'].tolist(),
       'item_id': self.test_info['question_id'].tolist(),
