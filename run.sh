@@ -134,3 +134,15 @@ python run.py data/train.csv data/validate.csv results-mfglab-7.csv MFGLab "[-0.
 python run.py data/train.csv data/validate.csv results-mfglab-8.csv MFGLab "[-0.1]"
 python run.py data/train.csv data/validate.csv results-mfglab-9.csv MFGLab "[-0.5]"
 python run.py data/train.csv data/validate.csv results-mfglab-10.csv MFGLab "[-1]"
+
+
+python kfold.py "MFGLab '[0, 0.000000000001]'" kfold-output
+python kfold.py "MFGLab '[0, 0.00000001]'" kfold-output
+python kfold.py "MFGLab '[0, 0.0000001]'" kfold-output
+python kfold.py "MFGLab '[0, 0.000001]'" kfold-output
+python kfold.py "MFGLab '[0, 0.00001]'" kfold-output
+python kfold.py "MFGLab '[0, 0.0001]'" kfold-output
+python kfold.py "MFGLab '[0, 0.001]'" kfold-output
+python kfold.py "MFGLab '[0, 0.01]'" kfold-output
+python kfold.py "MFGLab '[0, 0.1]'" kfold-output
+python kfold.py "MFGLab '[0, 0.5]'" kfold-output
