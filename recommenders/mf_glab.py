@@ -41,8 +41,7 @@ class MFGLab(BaseRecommender):
         regularization=self.lb)
     elif self.type == 2:
       self.recommender = graphlab.popularity_recommender.create(trainFrame,
-        target='rating',
-        regularization=self.lb)
+        target='rating')
 
     testFrame = graphlab.SFrame({
       'item_id': self.test_info['question_id'],
