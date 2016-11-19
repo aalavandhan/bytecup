@@ -122,3 +122,15 @@ python run.py data/train.csv data/train.csv data/12.csv UserCf "[11, -0.0005, 'e
 python run.py data/train.csv data/train.csv data/13.csv UserCf "[9, -0.0005, 'euclidean']"
 python run.py data/train.csv data/train.csv data/14.csv UserCf "[5, -0.0005, 'euclidean']"
 python run.py data/train.csv data/train.csv data/15.csv UserCf "[1, -0.0005, 'euclidean']"
+
+
+python run.py data/train.csv data/validate.csv results-mfglab-1.csv MFGLab "[0]"
+python run.py data/train.csv data/validate.csv results-mfglab-2.csv MFGLab "[-0.0001]"
+python run.py data/train.csv data/validate.csv results-mfglab-3.csv MFGLab "[-0.0005]"
+python run.py data/train.csv data/validate.csv results-mfglab-4.csv MFGLab "[-0.001]"
+python run.py data/train.csv data/validate.csv results-mfglab-5.csv MFGLab "[-0.005]"
+python run.py data/train.csv data/validate.csv results-mfglab-6.csv MFGLab "[-0.01]"
+python run.py data/train.csv data/validate.csv results-mfglab-7.csv MFGLab "[-0.05]"
+python run.py data/train.csv data/validate.csv results-mfglab-8.csv MFGLab "[-0.1]"
+python run.py data/train.csv data/validate.csv results-mfglab-9.csv MFGLab "[-0.5]"
+python run.py data/train.csv data/validate.csv results-mfglab-10.csv MFGLab "[-1]"

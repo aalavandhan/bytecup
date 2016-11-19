@@ -4,7 +4,7 @@ import pandas as pd
 from base import BaseRecommender
 
 class TextSimilarity(BaseRecommender):
-  def _recommend(self, question, user):
+  def _recommend(self, question, user, index):
     ui = self.user_index[user]
     qi = self.question_index[question]
 

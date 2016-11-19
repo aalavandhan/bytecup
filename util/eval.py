@@ -1,6 +1,6 @@
 from rank_metrics import ndcg_at_k
 from dict_reader import DictReader
-
+from random import shuffle
 
 def generate_ndcg_scores(TRUTH, EST):
   truth = DictReader(TRUTH).load()
@@ -10,8 +10,10 @@ def generate_ndcg_scores(TRUTH, EST):
   scores = [ ]
 
   for q in est.keys():
-    recommended = sorted(est[q].keys(), key=lambda u: est[q][u], reverse=True)
-    recommendation = map(lambda u: int(truth[q][u]),recommended)
+    users = est[q].keys()
+    # shuffle( users )
+    recommended = sorted(users, key=lambda u: est[q][u], reverse=True)
+    recommendation = map(lambda u: float(truth[q][u]), recommended)
 
     # if not any(recommendation):
     #   pass

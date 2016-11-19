@@ -5,7 +5,7 @@ from base import BaseRecommender
 from sklearn.neighbors import NearestNeighbors
 
 class UserCf(BaseRecommender):
-  def _recommend(self, question, user):
+  def _recommend(self, question, user, index):
     # active user
     active_user = {
       'vector': np.array(self.rMatrix[self.user_index[user], :])[ 0 ],

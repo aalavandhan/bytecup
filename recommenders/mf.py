@@ -5,7 +5,7 @@ from scipy import sparse
 from base import BaseRecommender
 
 class MF(BaseRecommender):
-  def _recommend(self, question, user):
+  def _recommend(self, question, user, index):
     return self.factorized[ self.user_index[user] ][ self.question_index[question] ]
 
   def hyper_parameters(self, K, lb, IGNORED, ca=1):

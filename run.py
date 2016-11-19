@@ -9,7 +9,9 @@ from recommenders.item_cf import ItemCf
 from recommenders.mf      import MF
 from recommenders.mf_imp  import MFImp
 
-from recommenders.mf_glab  import MFGLab
+from recommenders.mf_glab          import MFGLab
+from recommenders.mf_content_glab  import MFContentGLab
+from recommenders.user_cf_glab     import UserCfGLab
 
 from recommenders.user_cf_inf import UserCfInf
 from recommenders.item_cf_inf import ItemCfInf
@@ -36,8 +38,10 @@ user_info = pd.read_csv("data/user-features")
 question_info = pd.read_csv("data/question-features")
 
 train_info = pd.read_csv(TRAIN_PATH, sep=",")
+train_info['idx'] = train_info.index
 
 test_info = pd.read_csv(TEST_PATH, sep=",")
+test_info['idx'] = test_info.index
 
 NUMBER_OF_USERS = len(user_info)
 NUMBER_OF_QUESTIONS = len(question_info)
@@ -50,14 +54,15 @@ question_index = { }
 for index, row in question_info.iterrows():
   question_index[ row['question_id'] ] = index
 
-r = REC_TYPE(user_info, question_info, train_info, user_index, question_index,NUMBER_OF_USERS, NUMBER_OF_QUESTIONS)
+r = REC_TYPE(user_info, question_info, train_info, test_info, user_index, question_index,NUMBER_OF_USERS, NUMBER_OF_QUESTIONS)
 r.hyper_parameters(*ARGS)
 r.preprocess()
 
 def ensemble_recommender(row):
   q = row['question_id']
   u = row['user_id']
-  return r.recommend(q,u)
+  i = row['idx']
+  return r.recommend(q,u,i)
 
 recommendations = test_info.apply(ensemble_recommender, axis=1)
 

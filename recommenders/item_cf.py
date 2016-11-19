@@ -5,7 +5,7 @@ from user_cf import UserCf
 from sklearn.neighbors import NearestNeighbors
 
 class ItemCf(UserCf):
-  def _recommend(self, question, user):
+  def _recommend(self, question, user, index):
     # active question
     active_question = {
       'vector': np.array( self.rMatrix[:, self.question_index[question]].transpose() )[ 0 ],

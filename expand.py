@@ -130,5 +130,5 @@ user_expert_latent.columns = map(lambda c: "ut" + str(c), range(len(user_expert_
 user_info = pd.concat([user_info, user_word_latent, user_char_latent, user_expert_latent], axis=1, join_axes=[user_info.index])
 
 
-user_info.to_csv("data/user-features", sep=",", columns=["user_id"] + user_word_latent.columns + user_char_latent.columns + user_expert_latent.columns)
-question_info.to_csv("data/question-features", sep=",", columns=[ "question_id", "tag", "upvotes", "answers", "top_answers" ] + question_word_latent.columns + question_char_latent.columns)
+user_info.to_csv("data/user-features", sep=",", columns=["user_id"] + user_word_latent.columns.tolist() + user_char_latent.columns.tolist() + user_expert_latent.columns.tolist())
+question_info.to_csv("data/question-features", sep=",", columns=[ "question_id", "tag", "upvotes", "answers", "top_answers" ] + question_word_latent.columns.tolist() + question_char_latent.columns.tolist())

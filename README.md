@@ -54,3 +54,13 @@ Question-Word: 3265
 User-Tag: 34
 User-Char: 739
 User-question: 2858
+
+
+# GLAB
+# MF { ranking_factorization_recommender }
+IG: [0, -0.0001]
+
+# WITH-CONTENT
+# MF_CONTENT { ranking_factorization_recommender }
+IG: [0, -0.0001]
+33.5724677291, 33.6854086272
