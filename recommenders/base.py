@@ -31,8 +31,8 @@ class BaseRecommender:
     self.question_info['answerability'] = ( self.question_info['top_answers'] / self.question_info['answers'] )
     self.question_info['answerability'] =  self.question_info['answerability'].fillna(0)
 
-    self.user_features = [ "asked", "answered" ]
-    self.question_features = [ "tag", "upvotes", "answers", "top_answers", "asked", 'answerability' ]
+    self.question_features = list( set(self.question_info.columns) - set(["question_id", "answered"]) )
+    self.user_features = list( set(self.user_info.columns) - set(["user_id"]) )
 
     self.question_info['tag'] = self.question_info['tag'].astype(basestring)
 
