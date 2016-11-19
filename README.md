@@ -58,7 +58,7 @@ User-question: 2858
 
 # GLAB
 # MF { ranking_factorization_recommender }
-IG: [0, -0.0001]
+BEST LAMBDA: 0.00001
 
 # WITH-CONTENT
 # MF_CONTENT { ranking_factorization_recommender }

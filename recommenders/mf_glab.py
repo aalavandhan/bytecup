@@ -8,8 +8,9 @@ class MFGLab(BaseRecommender):
   def _recommend(self, question, user, index):
     return self.predictions[index]
 
-  def hyper_parameters(self, IGNORED=0, ca=1):
+  def hyper_parameters(self, lb=0.1, IGNORED=0, ca=1):
     # Hyper parameters
+    self.lb = lb
     self.IGNORED = IGNORED
     self.ca = ca
     return self
@@ -24,7 +25,10 @@ class MFGLab(BaseRecommender):
       'item_id': self.train_info['question_id'].tolist(),
       'rating' : self.train_info['answered'],
     })
-    self.recommender = graphlab.ranking_factorization_recommender.create(trainFrame,target='rating')
+    self.recommender = graphlab.ranking_factorization_recommender.create(trainFrame,
+      target='rating',
+      regularization=self.lb,
+      unobserved_rating_value=0.25)
     testFrame = graphlab.SFrame({
       'item_id': self.test_info['question_id'],
       'user_id': self.test_info['user_id'],

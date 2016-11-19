@@ -2,21 +2,9 @@ import numpy as np
 import graphlab
 import scipy
 from scipy import sparse
-from base import BaseRecommender
+from mf_glab import MFGLab
 
-class MFContentGLab(BaseRecommender):
-  def _recommend(self, question, user, index):
-    return self.predictions[index]
-
-  def hyper_parameters(self, IGNORED, ca=1):
-    # Hyper parameters
-    self.IGNORED = IGNORED
-    self.ca = ca
-    return self
-
-  def base_preprocess(self):
-    BaseRecommender.preprocess(self)
-
+class MFContentGLab(MFGLab):
   def preprocess(self):
     self.base_preprocess()
     trainFrame = graphlab.SFrame({
