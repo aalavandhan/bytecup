@@ -57,10 +57,13 @@ User-question: 2858
 
 
 # GLAB
-# MF { ranking_factorization_recommender }
+# MF { ranking_factorization_recommender, factorization_recommender, popularity }
 BEST LAMBDA: 0.00001
+Best Lambda: {KFOLD} 0.000008
 
 # WITH-CONTENT
-# MF_CONTENT { ranking_factorization_recommender }
+# MF { ranking_factorization_recommender, factorization_recommender, popularity }
 IG: [0, -0.0001]
-33.5724677291, 33.6854086272
+
+
+BOTH (-1) fill; value: 33.85

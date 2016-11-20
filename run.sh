@@ -136,13 +136,63 @@ python run.py data/train.csv data/validate.csv results-mfglab-9.csv MFGLab "[-0.
 python run.py data/train.csv data/validate.csv results-mfglab-10.csv MFGLab "[-1]"
 
 
-python kfold.py "MFGLab '[0, 0.000000000001]'" kfold-output
-python kfold.py "MFGLab '[0, 0.00000001]'" kfold-output
-python kfold.py "MFGLab '[0, 0.0000001]'" kfold-output
-python kfold.py "MFGLab '[0, 0.000001]'" kfold-output
-python kfold.py "MFGLab '[0, 0.00001]'" kfold-output
-python kfold.py "MFGLab '[0, 0.0001]'" kfold-output
-python kfold.py "MFGLab '[0, 0.001]'" kfold-output
-python kfold.py "MFGLab '[0, 0.01]'" kfold-output
-python kfold.py "MFGLab '[0, 0.1]'" kfold-output
-python kfold.py "MFGLab '[0, 0.5]'" kfold-output
+
+
+
+python kfold.py "MFContentGLab '[0, 0.000008, 0.16]'" kfold-output
+python kfold.py "MFContentGLab '[0, 0.000008, 0.17]'" kfold-output
+python kfold.py "MFContentGLab '[0, 0.000008, 0.18]'" kfold-output
+python kfold.py "MFContentGLab '[0, 0.000008, 0.19]'" kfold-output
+python kfold.py "MFContentGLab '[0, 0.000008, 0.2]'" kfold-output
+
+
+
+python run.py data/train.csv data/validate.csv validate/test/7.csv UserCfGLab "['pearson']"
+python run.py data/train.csv data/validate.csv validate/test/8.csv UserCfGLab "['cosine']"
+python run.py data/train.csv data/validate.csv validate/test/9.csv UserCfGLab "['jaccard']"
+python run.py data/train.csv data/validate.csv validate/test/10.csv ItemCfGLab "['pearson']"
+python run.py data/train.csv data/validate.csv validate/test/11.csv ItemCfGLab "['cosine']"
+python run.py data/train.csv data/validate.csv validate/test/12.csv ItemCfGLab "['jaccard']"
+python run.py data/train.csv data/validate.csv validate/test/13.csv UserCf "[1, -0.0005, 'euclidean']"
+python run.py data/train.csv data/validate.csv validate/test/14.csv UserCf "[11, -0.0005, 'euclidean']"
+python run.py data/train.csv data/validate.csv validate/test/15.csv UserCf "[51, -0.0005, 'euclidean']"
+python run.py data/train.csv data/validate.csv validate/test/16.csv ItemCf "[1, 0, 'hamming']"
+python run.py data/train.csv data/validate.csv validate/test/17.csv ItemCf "[9, 0, 'hamming']"
+python run.py data/train.csv data/validate.csv validate/test/18.csv ItemCf "[51, 0, 'hamming']"
+python run.py data/train.csv data/validate.csv validate/test/19.csv TextSimilarity "['word']"
+python run.py data/train.csv data/validate.csv validate/test/20.csv TextSimilarity "['char']"
+python run.py data/train.csv data/validate.csv validate/test/21.csv TagRule
+
+
+python run.py data/train.csv data/validate.csv validate/test/24.csv UserCfContentGLab "['pearson']"
+python run.py data/train.csv data/validate.csv validate/test/25.csv UserCfContentGLab "['cosine']"
+python run.py data/train.csv data/validate.csv validate/test/26.csv UserCfContentGLab "['jaccard']"
+python run.py data/train.csv data/validate.csv validate/test/27.csv ItemCfContentGLab "['pearson']"
+python run.py data/train.csv data/validate.csv validate/test/28.csv ItemCfContentGLab "['cosine']"
+python run.py data/train.csv data/validate.csv validate/test/29.csv ItemCfContentGLab "['jaccard']"
+
+
+python run.py data/train.csv data/train.csv validate/train/7.csv UserCfGLab "['pearson']"
+python run.py data/train.csv data/train.csv validate/train/8.csv UserCfGLab "['cosine']"
+python run.py data/train.csv data/train.csv validate/train/9.csv UserCfGLab "['jaccard']"
+python run.py data/train.csv data/train.csv validate/train/10.csv ItemCfGLab "['pearson']"
+python run.py data/train.csv data/train.csv validate/train/11.csv ItemCfGLab "['cosine']"
+python run.py data/train.csv data/train.csv validate/train/12.csv ItemCfGLab "['jaccard']"
+python run.py data/train.csv data/train.csv validate/train/13.csv UserCf "[1, -0.0005, 'euclidean']"
+python run.py data/train.csv data/train.csv validate/train/14.csv UserCf "[11, -0.0005, 'euclidean']"
+python run.py data/train.csv data/train.csv validate/train/15.csv UserCf "[51, -0.0005, 'euclidean']"
+python run.py data/train.csv data/train.csv validate/train/16.csv ItemCf "[1, 0, 'hamming']"
+python run.py data/train.csv data/train.csv validate/train/17.csv ItemCf "[9, 0, 'hamming']"
+python run.py data/train.csv data/train.csv validate/train/18.csv ItemCf "[51, 0, 'hamming']"
+python run.py data/train.csv data/train.csv validate/train/19.csv TextSimilarity "['word']"
+python run.py data/train.csv data/train.csv validate/train/20.csv TextSimilarity "['char']"
+python run.py data/train.csv data/train.csv validate/train/21.csv TagRule
+
+python run.py data/train.csv data/train.csv validate/train/24.csv UserCfContentGLab "['pearson']"
+python run.py data/train.csv data/train.csv validate/train/25.csv UserCfContentGLab "['cosine']"
+python run.py data/train.csv data/train.csv validate/train/26.csv UserCfContentGLab "['jaccard']"
+python run.py data/train.csv data/train.csv validate/train/27.csv ItemCfContentGLab "['pearson']"
+python run.py data/train.csv data/train.csv validate/train/28.csv ItemCfContentGLab "['cosine']"
+python run.py data/train.csv data/train.csv validate/train/29.csv ItemCfContentGLab "['jaccard']"
+
+

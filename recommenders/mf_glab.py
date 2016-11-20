@@ -11,11 +11,11 @@ class MFGLab(BaseRecommender):
   # 0 => ranking_factorization_recommender
   # 1 => factorization_recommender
   # 2 => popularity_recommender
-  def hyper_parameters(self, type=0, lb=0.1, IGNORED=0, ca=1):
+  def hyper_parameters(self, type=0, lb=0.1, ng=0, ca=1):
     # Hyper parameters
     self.type = type
     self.lb = lb
-    self.IGNORED = IGNORED
+    self.ng = ng
     self.ca = ca
     return self
 
@@ -34,7 +34,7 @@ class MFGLab(BaseRecommender):
       self.recommender = graphlab.ranking_factorization_recommender.create(trainFrame,
         target='rating',
         regularization=self.lb,
-        unobserved_rating_value=0.25)
+        unobserved_rating_value=self.ng)
     elif self.type == 1:
       self.recommender = graphlab.factorization_recommender.create(trainFrame,
         target='rating',

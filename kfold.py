@@ -26,6 +26,6 @@ for i in range(10):
 
   nScores.append( np.array(scores).mean() * 100 )
 
-output.write("'{0}', {1}".format(ARGUMENTS, np.array(nScores).mean()))
+output.write("'{0}', {1}\n".format(ARGUMENTS, np.array(nScores).mean()))
 output.close()
 
