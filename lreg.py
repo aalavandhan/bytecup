@@ -8,91 +8,98 @@ from util.eval import generate_ndcg_scores
 from util.dict_reader import DictReader
 from sklearn.ensemble import RandomForestClassifier
 
-from sklearn.feature_extraction.text import CountVectorizer
+import graphlab
 
-from sklearn import linear_model
+from operator import itemgetter
 
-import gc
+VALIDATION_SET = sys.argv[1]
+TEST_SET       = sys.argv[2]
+VALIDATE       = sys.argv[3]
+TEST           = sys.argv[4]
+RESULT         = sys.argv[5]
 
-TRAIN = sys.argv[1]
-TEST  = sys.argv[2]
-OP    = sys.argv[3]
+validation_recommenders = sorted( map(lambda l: join(VALIDATE, l), listdir(VALIDATE)) )
+test_recommenders       = sorted( map(lambda l: join(TEST, l), listdir(TEST)) )
+
+print validation_recommenders
+print test_recommenders
+
+numberOfRecom = len(validation_recommenders)
+
+results = { }
+scores  = { }
+mScore  = { }
+question = { }
+recommendation = { }
+
+for r in range(numberOfRecom):
+  results[r] = generate_ndcg_scores(VALIDATION_SET, validation_recommenders[r])
+  scores[r]  = map(lambda s: s[0], results[r])
+  mScore[r] = np.array(scores[r]).mean()
+  recommendation[r] = DictReader(test_recommenders  [r]).load()
+
+  for s in results[r]:
+    if s[1] not in question:
+      question[s[1]] = { }
+
+    question[s[1]][r] = s[0]
 
 
-question_info = pd.read_csv("data/question_info.txt", sep="\t", header=None, names=[
-  "question_id", "tag", "word_id", "char_id", "upvotes", "answers", "top_answers"
-])
-user_info = pd.read_csv("data/user_info.txt", sep="\t", header=None, names=[
-  "user_id", "expert_tags", "word_id", "char_id"
-])
-train = pd.read_csv(TRAIN, sep=",")
-test  = pd.read_csv(TEST, sep=",")
+train_info = pd.read_csv(VALIDATION_SET, sep=",")
+test_info   = pd.read_csv(TEST_SET, sep=",")
 
-vctorizer = CountVectorizer(lambda s: s.split('/'))
-qWords = pd.DataFrame( vctorizer.fit_transform(question_info['word_id']).todense() )
-qWords.columns = map(lambda i: "qw" + str(i), range(len(qWords.columns)))
-qWords = qWords.astype(np.bool)
+# Build question features
+question_info = pd.read_csv("data/question-features")
 
-qChars = pd.DataFrame( vctorizer.fit_transform(question_info['char_id']).todense() )
-qChars.columns = map(lambda i: "qc" + str(i), range(len(qChars.columns)))
-qChars = qChars.astype(np.bool)
+answered = train_info[ train_info.answered == 1 ].groupby('question_id').count()['answered']
+asked = train_info.groupby('question_id').count()['answered'].rename('asked')
+question_info = question_info.join(answered, on="question_id", how="left" ).join(asked, on="question_id", how="left")
+question_info['answered'] =  question_info['answered'].fillna(0)
+question_info['asked']    =  question_info['asked'].fillna(0)
+question_info['asked']    =  question_info['asked'] + question_info['answered']
 
-uWords = pd.DataFrame( vctorizer.fit_transform(user_info['word_id']).todense() )
-uWords.columns = map(lambda i: "uw" + str(i), range(len(uWords.columns)))
-uWords = uWords.astype(np.bool)
+question_info['answerability'] = ( question_info['top_answers'] / question_info['answers'] )
+question_info['answerability'] =  question_info['answerability'].fillna(-1)
 
-uChars = pd.DataFrame( vctorizer.fit_transform(user_info['char_id']).todense() )
-uChars.columns = map(lambda i: "uc" + str(i), range(len(uChars.columns)))
-uChars = uChars.astype(np.bool)
+FEATURES = list( set(question_info.columns) - set([ "answered", "question_id"]) )
 
-uTags  = pd.DataFrame( vctorizer.fit_transform(user_info['expert_tags']).todense() )
-uTags.columns = map(lambda i: "ut" + str(i), range(len(uTags.columns)))
-uTags = uTags.astype(np.bool)
 
-QFEATURES = [ "tag", "upvotes", "answers", "top_answers" ] + qWords.columns.tolist()
-UFEATURES = uWords.columns.tolist() + uTags.columns.tolist()
+validation_data = question_info[question_info.question_id.isin(train_info['question_id'])].copy()
 
-FEATURES = QFEATURES + UFEATURES
-TARGET = 'answered'
+for rec in range(numberOfRecom):
+  validation_data['r'+str( rec )] = validation_data.apply(lambda r: question[ r['question_id'] ][ rec ], axis=1)
 
-detailed_question_info = pd.concat([question_info, qWords], axis=1, join_axes=[question_info.index])
-detailed_user_info     = pd.concat([user_info, uWords, uTags], axis=1, join_axes=[user_info.index])
+test_data = question_info[question_info.question_id.isin(test_info['question_id'])].copy()
 
-TRAIN_DATA = train.merge(detailed_question_info, left_on='question_id', right_on='question_id', how='inner')
-TRAIN_DATA = TRAIN_DATA.merge(detailed_user_info, left_on='user_id', right_on='user_id', how='inner')
 
-TEST_DATA = test.merge(detailed_question_info, left_on='question_id', right_on='question_id', how='inner')
-TEST_DATA = TEST_DATA.merge(detailed_user_info, left_on='user_id', right_on='user_id', how='inner')
+# print "Training .. "
+# Train
+# c = RandomForestClassifier(n_estimators=100, criterion='entropy', max_depth=None,
+#   min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0,
+#   max_features=None, max_leaf_nodes=None, min_impurity_split=1e-07,
+#   bootstrap=True, oob_score=False, n_jobs=1, random_state=None,
+#   verbose=0, warm_start=False, class_weight=None)
+# c.fit(validation_data[FEATURES], validation_data['classification'])
+# print "Predicting .. "
+# test_data['recommendation'] = c.predict(test_data[FEATURES])
 
-print "DATA LOADED"
+for reg in range(numberOfRecom):
+  model = graphlab.linear_regression.create(graphlab.SFrame(data=validation_data), target="r"+str(reg), features=FEATURES, l2_penalty=0.1, 
+			max_iterations=25)
+  test_data['r' + str(reg)] = model.predict(graphlab.SFrame(data=test_data[FEATURES]))
 
-model = linear_model.LogisticRegression(
-    penalty='l2',
-    dual=False,
-    tol=0.0001,
-    C=1.0,
-    fit_intercept=True,
-    intercept_scaling=1,
-    class_weight=None,
-    random_state=None,
-    solver='liblinear',
-    max_iter=1000,
-    multi_class='ovr',
-    verbose=1,
-    warm_start=False,
-    n_jobs=1
-)
+def recommend(row):
+  recommenders = map(lambda reg: "r" + str(reg), range(numberOfRecom))
+  return int(row[recommenders].idxmax()[1:])
 
-TRAIN_TARGET = TRAIN_DATA[TARGET].copy()
-TRAIN_DATA = TRAIN_DATA[FEATURES].as_matrix()
+test_data['recommendation'] = test_data.apply(lambda r: recommend(r), axis=1)
 
-model.fit(TRAIN_DATA, TRAIN_TARGET)
-print "TRAINING DONE"
+print test_data.groupby(['recommendation']).count()
 
-TEST_DATA = TEST_DATA[FEATURES].as_matrix()
-predictions = model.predict_proba(TEST_DATA)
-print "PREDICTION DONE"
+# Return recommendation
+def recommend(r):
+  rec = test_data[ test_data.question_id == r['question_id'] ]['recommendation'].tolist()[ 0 ]
+  return float( recommendation[rec][r['question_id']][r['user_id']] )
 
-res = TEST_DATA[['question_id', 'user_id']].copy()
-res['answered'] = predictions[:,1]
-res.to_csv(OP, sep=",", index=None)
+test_info['answered'] = test_info.apply(recommend, axis=1)
+test_info[['question_id', 'user_id', 'answered']].to_csv(RESULT, sep=",", index=None)

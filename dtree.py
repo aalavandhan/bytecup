@@ -10,6 +10,8 @@ from sklearn.ensemble import RandomForestClassifier
 
 import graphlab
 
+from operator import itemgetter
+
 VALIDATION_SET = sys.argv[1]
 TEST_SET       = sys.argv[2]
 VALIDATE       = sys.argv[3]
@@ -18,6 +20,9 @@ RESULT         = sys.argv[5]
 
 validation_recommenders = sorted( map(lambda l: join(VALIDATE, l), listdir(VALIDATE)) )
 test_recommenders       = sorted( map(lambda l: join(TEST, l), listdir(TEST)) )
+
+print validation_recommenders
+print test_recommenders
 
 numberOfRecom = len(validation_recommenders)
 
@@ -59,8 +64,16 @@ question_info['answerability'] =  question_info['answerability'].fillna(-1)
 FEATURES = list( set(question_info.columns) - set([ "answered", "question_id"]) )
 
 def assign_recommender(r):
-  s = sorted(range(numberOfRecom), key=lambda rec: (question[ r['question_id'] ][ rec ], mScore[ rec ]), reverse=True)
+  s = sorted(range(numberOfRecom), key=lambda rec: (question[ r['question_id'] ][ rec ], mScore[ rec ]), reverse=True) 
   return s[0]
+  srs = question[ r['question_id'] ] 
+  ordered = sorted(srs.items(), key=itemgetter(1), reverse=True)
+  if ordered[0][1] == 0:
+    return s[0]
+  best = filter(lambda s: s[1] == ordered[0][1], ordered)
+  bestRecommenders = map(lambda b: b[0], best)
+  bestScores = np.array( map(lambda b: b[1], best) )
+  return np.random.choice(bestRecommenders, p=bestScores/bestScores.sum())
 
 validation_data = question_info[question_info.question_id.isin(train_info['question_id'])].copy()
 validation_data['classification'] = validation_data.apply(lambda r: assign_recommender(r), axis=1)
@@ -77,8 +90,12 @@ test_data = question_info[question_info.question_id.isin(test_info['question_id'
 # c.fit(validation_data[FEATURES], validation_data['classification'])
 # print "Predicting .. "
 # test_data['recommendation'] = c.predict(test_data[FEATURES])
+print validation_data.groupby(['classification']).count()
+
 model = graphlab.random_forest_classifier.create(graphlab.SFrame(data=validation_data), target='classification', features=FEATURES)
 test_data['recommendation'] = model.predict(graphlab.SFrame(data=test_data[FEATURES]))
+
+print test_data.groupby(['recommendation']).count()
 
 # Return recommendation
 def recommend(r):
