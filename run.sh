@@ -173,12 +173,12 @@ python run.py data/train.csv data/validate.csv validate/test/20.csv TextSimilari
 python run.py data/train.csv data/validate.csv validate/test/21.csv TagRule
 
 
-python run.py data/train.csv data/validate.csv validate/test/24.csv UserCfContentGLab "['pearson']"
-python run.py data/train.csv data/validate.csv validate/test/25.csv UserCfContentGLab "['cosine']"
-python run.py data/train.csv data/validate.csv validate/test/26.csv UserCfContentGLab "['jaccard']"
-python run.py data/train.csv data/validate.csv validate/test/27.csv ItemCfContentGLab "['pearson']"
-python run.py data/train.csv data/validate.csv validate/test/28.csv ItemCfContentGLab "['cosine']"
-python run.py data/train.csv data/validate.csv validate/test/29.csv ItemCfContentGLab "['jaccard']"
+# python run.py data/train.csv data/validate.csv validate/test/24.csv UserCfContentGLab "['pearson']"
+# python run.py data/train.csv data/validate.csv validate/test/25.csv UserCfContentGLab "['cosine']"
+# python run.py data/train.csv data/validate.csv validate/test/26.csv UserCfContentGLab "['jaccard']"
+# python run.py data/train.csv data/validate.csv validate/test/27.csv ItemCfContentGLab "['pearson']"
+# python run.py data/train.csv data/validate.csv validate/test/28.csv ItemCfContentGLab "['cosine']"
+# python run.py data/train.csv data/validate.csv validate/test/29.csv ItemCfContentGLab "['jaccard']"
 
 
 python run.py data/train.csv data/train.csv validate/train/1.csv MFGLab "[0, 0.000008, 0.01]"
@@ -203,11 +203,11 @@ python run.py data/train.csv data/train.csv validate/train/19.csv TextSimilarity
 python run.py data/train.csv data/train.csv validate/train/20.csv TextSimilarity "['char']"
 python run.py data/train.csv data/train.csv validate/train/21.csv TagRule
 
-python run.py data/train.csv data/train.csv validate/train/24.csv UserCfContentGLab "['pearson']"
-python run.py data/train.csv data/train.csv validate/train/25.csv UserCfContentGLab "['cosine']"
-python run.py data/train.csv data/train.csv validate/train/26.csv UserCfContentGLab "['jaccard']"
-python run.py data/train.csv data/train.csv validate/train/27.csv ItemCfContentGLab "['pearson']"
-python run.py data/train.csv data/train.csv validate/train/28.csv ItemCfContentGLab "['cosine']"
-python run.py data/train.csv data/train.csv validate/train/29.csv ItemCfContentGLab "['jaccard']"
+# python run.py data/train.csv data/train.csv validate/train/24.csv UserCfContentGLab "['pearson']"
+# python run.py data/train.csv data/train.csv validate/train/25.csv UserCfContentGLab "['cosine']"
+# python run.py data/train.csv data/train.csv validate/train/26.csv UserCfContentGLab "['jaccard']"
+# python run.py data/train.csv data/train.csv validate/train/27.csv ItemCfContentGLab "['pearson']"
+# python run.py data/train.csv data/train.csv validate/train/28.csv ItemCfContentGLab "['cosine']"
+# python run.py data/train.csv data/train.csv validate/train/29.csv ItemCfContentGLab "['jaccard']"
 
 

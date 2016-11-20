@@ -8,7 +8,7 @@ from util.eval import generate_ndcg_scores
 from util.dict_reader import DictReader
 from sklearn.ensemble import RandomForestClassifier
 
-from sklearn.feature_extraction.text import CountVectorizer
+import graphlab
 
 VALIDATION_SET = sys.argv[1]
 TEST_SET       = sys.argv[2]
@@ -16,8 +16,9 @@ VALIDATE       = sys.argv[3]
 TEST           = sys.argv[4]
 RESULT         = sys.argv[5]
 
-validation_recommenders = map(lambda l: join(VALIDATE, l), listdir(VALIDATE))
-test_recommenders  = map(lambda l: join(TEST, l), listdir(TEST))
+validation_recommenders = sorted( map(lambda l: join(VALIDATE, l), listdir(VALIDATE)) )
+test_recommenders       = sorted( map(lambda l: join(TEST, l), listdir(TEST)) )
+
 numberOfRecom = len(validation_recommenders)
 
 results = { }
@@ -38,23 +39,24 @@ for r in range(numberOfRecom):
 
     question[s[1]][r] = s[0]
 
-# Build question features
-question_info = pd.read_csv("data/question_info.txt", sep="\t", header=None, names=[
-    "question_id", "tag", "word_id", "char_id", "upvotes", "answers", "top_answers"
-])
+
 train_info = pd.read_csv(VALIDATION_SET, sep=",")
 test_info   = pd.read_csv(TEST_SET, sep=",")
 
+# Build question features
+question_info = pd.read_csv("data/question-features")
 
-vctorizer = CountVectorizer(lambda s: s.split('/'))
-qWords = pd.DataFrame( vctorizer.fit_transform(question_info['word_id']).todense() )
-qWords.columns = map(lambda i: "w" + str(i), range(len(qWords.columns)))
-qChars = pd.DataFrame( vctorizer.fit_transform(question_info['char_id']).todense() )
-qChars.columns = map(lambda i: "c" + str(i), range(len(qChars.columns)))
+answered = train_info[ train_info.answered == 1 ].groupby('question_id').count()['answered']
+asked = train_info.groupby('question_id').count()['answered'].rename('asked')
+question_info = question_info.join(answered, on="question_id", how="left" ).join(asked, on="question_id", how="left")
+question_info['answered'] =  question_info['answered'].fillna(0)
+question_info['asked']    =  question_info['asked'].fillna(0)
+question_info['asked']    =  question_info['asked'] + question_info['answered']
 
-question_info = pd.concat([question_info, qWords, qChars], axis=1, join_axes=[question_info.index])
+question_info['answerability'] = ( question_info['top_answers'] / question_info['answers'] )
+question_info['answerability'] =  question_info['answerability'].fillna(-1)
 
-FEATURES = [ "tag", "upvotes", "answers", "top_answers" ] + qWords.columns.tolist() + qChars.columns.tolist()
+FEATURES = list( set(question_info.columns) - set([ "answered", "question_id"]) )
 
 def assign_recommender(r):
   s = sorted(range(numberOfRecom), key=lambda rec: (question[ r['question_id'] ][ rec ], mScore[ rec ]), reverse=True)
@@ -64,20 +66,24 @@ validation_data = question_info[question_info.question_id.isin(train_info['quest
 validation_data['classification'] = validation_data.apply(lambda r: assign_recommender(r), axis=1)
 test_data = question_info[question_info.question_id.isin(test_info['question_id'])].copy()
 
-# Train
-c = RandomForestClassifier(n_estimators=100, criterion='entropy', max_depth=None,
-  min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0,
-  max_features=None, max_leaf_nodes=None, min_impurity_split=1e-07,
-  bootstrap=True, oob_score=False, n_jobs=1, random_state=None,
-  verbose=0, warm_start=False, class_weight=None)
 
-c.fit(validation_data[FEATURES], validation_data['classification'])
-test_data['recommendation'] = c.predict(test_data[FEATURES])
+# print "Training .. "
+# Train
+# c = RandomForestClassifier(n_estimators=100, criterion='entropy', max_depth=None,
+#   min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0,
+#   max_features=None, max_leaf_nodes=None, min_impurity_split=1e-07,
+#   bootstrap=True, oob_score=False, n_jobs=1, random_state=None,
+#   verbose=0, warm_start=False, class_weight=None)
+# c.fit(validation_data[FEATURES], validation_data['classification'])
+# print "Predicting .. "
+# test_data['recommendation'] = c.predict(test_data[FEATURES])
+model = graphlab.random_forest_classifier.create(graphlab.SFrame(data=validation_data), target='classification', features=FEATURES)
+test_data['recommendation'] = model.predict(graphlab.SFrame(data=test_data[FEATURES]))
 
 # Return recommendation
 def recommend(r):
   rec = test_data[ test_data.question_id == r['question_id'] ]['recommendation'].tolist()[ 0 ]
   return float( recommendation[rec][r['question_id']][r['user_id']] )
 
-test_info['recommendation'] = test_info.apply(recommend, axis=1)
-test_info[['question_id', 'user_id', 'recommendation']].to_csv(RESULT, sep=",", index=None)
+test_info['answered'] = test_info.apply(recommend, axis=1)
+test_info[['question_id', 'user_id', 'answered']].to_csv(RESULT, sep=",", index=None)
