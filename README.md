@@ -59,7 +59,7 @@ User-question: 2858
 # GLAB
 # MF { ranking_factorization_recommender, factorization_recommender, popularity }
 BEST LAMBDA: 0.00001
-Best Lambda: {KFOLD} 0.000008
+Best parameters: {KFOLD} [0, 0.000008, 0.01]
 
 # WITH-CONTENT
 # MF { ranking_factorization_recommender, factorization_recommender, popularity }

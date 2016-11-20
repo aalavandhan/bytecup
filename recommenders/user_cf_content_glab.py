@@ -13,11 +13,11 @@ class UserCfContentGLab(UserCfGLab):
       'rating' : self.train_info['answered'],
     })
     qFeatures = reduce(lambda m,f: m.update({ f: self.question_info[f] }) or m, self.question_features, {
-      "item_id": self.question_info.index,
+      "user_id": self.question_info.index,
     })
     user_info = graphlab.SFrame(qFeatures)
     uFeatures = reduce(lambda m,f: m.update({ f: self.user_info[f] }) or m, self.user_features, {
-      "user_id": self.user_info.index,
+      "item_id": self.user_info.index,
     })
     item_info = graphlab.SFrame(uFeatures)
 

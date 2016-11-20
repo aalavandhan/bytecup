@@ -147,6 +147,15 @@ python kfold.py "MFContentGLab '[0, 0.000008, 0.2]'" kfold-output
 
 
 
+
+
+
+python run.py data/train.csv data/validate.csv validate/test/1.csv MFGLab "[0, 0.000008, 0.01]"
+python run.py data/train.csv data/validate.csv validate/test/2.csv MFContentGLab "[0, 0.000008, 0.01]"
+python run.py data/train.csv data/validate.csv validate/test/3.csv MFGLab "[1, 0.000008, 0.01]"
+python run.py data/train.csv data/validate.csv validate/test/4.csv MFContentGLab "[1, 0.000008, 0.01]"
+python run.py data/train.csv data/validate.csv validate/test/5.csv MFGLab "[2, 0.000008, 0.01]"
+python run.py data/train.csv data/validate.csv validate/test/6.csv MFContentGLab "[2, 0.000008, 0.01]"
 python run.py data/train.csv data/validate.csv validate/test/7.csv UserCfGLab "['pearson']"
 python run.py data/train.csv data/validate.csv validate/test/8.csv UserCfGLab "['cosine']"
 python run.py data/train.csv data/validate.csv validate/test/9.csv UserCfGLab "['jaccard']"
@@ -172,6 +181,12 @@ python run.py data/train.csv data/validate.csv validate/test/28.csv ItemCfConten
 python run.py data/train.csv data/validate.csv validate/test/29.csv ItemCfContentGLab "['jaccard']"
 
 
+python run.py data/train.csv data/train.csv validate/train/1.csv MFGLab "[0, 0.000008, 0.01]"
+python run.py data/train.csv data/train.csv validate/train/2.csv MFContentGLab "[0, 0.000008, 0.01]"
+python run.py data/train.csv data/train.csv validate/train/3.csv MFGLab "[1, 0.000008, 0.01]"
+python run.py data/train.csv data/train.csv validate/train/4.csv MFContentGLab "[1, 0.000008, 0.01]"
+python run.py data/train.csv data/train.csv validate/train/5.csv MFGLab "[2, 0.000008, 0.01]"
+python run.py data/train.csv data/train.csv validate/train/6.csv MFContentGLab "[2, 0.000008, 0.01]"
 python run.py data/train.csv data/train.csv validate/train/7.csv UserCfGLab "['pearson']"
 python run.py data/train.csv data/train.csv validate/train/8.csv UserCfGLab "['cosine']"
 python run.py data/train.csv data/train.csv validate/train/9.csv UserCfGLab "['jaccard']"
