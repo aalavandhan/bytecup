@@ -17,9 +17,6 @@ from recommenders.item_cf_glab     import ItemCfGLab
 from recommenders.user_cf_content_glab     import UserCfContentGLab
 from recommenders.item_cf_content_glab     import ItemCfContentGLab
 
-from recommenders.user_cf_inf import UserCfInf
-from recommenders.item_cf_inf import ItemCfInf
-
 from recommenders.text_similarity import TextSimilarity
 from recommenders.tag_rule        import TagRule
 
