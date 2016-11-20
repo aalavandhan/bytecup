@@ -21,18 +21,20 @@ class BaseRecommender:
     self.user_info = self.user_info.join(answered, on="user_id", how="left" ).join(asked, on="user_id", how="left" )
     self.user_info['answered'] =  self.user_info['answered'].fillna(0)
     self.user_info['asked']    =  self.user_info['asked'].fillna(0)
+    self.user_info['asked']    =  self.user_info['asked'] + self.user_info['answered']
 
     answered = self.train_info[ self.train_info.answered == 1 ].groupby('question_id').count()['answered']
     asked = self.train_info.groupby('question_id').count()['answered'].rename('asked')
     self.question_info = self.question_info.join(answered, on="question_id", how="left" ).join(asked, on="question_id", how="left")
     self.question_info['answered'] =  self.question_info['answered'].fillna(0)
     self.question_info['asked']    =  self.question_info['asked'].fillna(0)
+    self.question_info['asked']    =  self.question_info['asked'] + self.question_info['answered']
 
     self.question_info['answerability'] = ( self.question_info['top_answers'] / self.question_info['answers'] )
-    self.question_info['answerability'] =  self.question_info['answerability'].fillna(0)
+    self.question_info['answerability'] =  self.question_info['answerability'].fillna(-1)
 
     self.question_features = list( set(self.question_info.columns) - set(["question_id", "answered"]) )
-    self.user_features     = list( set(self.user_info.columns) - set(["user_id"]) )
+    self.user_features     = list( set(self.user_info.columns) - set(["user_id", "answered"]) )
 
     self.question_info['tag'] = self.question_info['tag'].astype(basestring)
 
