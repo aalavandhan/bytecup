@@ -9,13 +9,13 @@ from recommenders.item_cf import ItemCf
 from recommenders.mf      import MF
 from recommenders.mf_imp  import MFImp
 
-# from recommenders.mf_glab          import MFGLab
-# from recommenders.mf_content_glab  import MFContentGLab
-# from recommenders.user_cf_glab     import UserCfGLab
-# from recommenders.item_cf_glab     import ItemCfGLab
+from recommenders.mf_glab          import MFGLab
+from recommenders.mf_content_glab  import MFContentGLab
+from recommenders.user_cf_glab     import UserCfGLab
+from recommenders.item_cf_glab     import ItemCfGLab
 
-# from recommenders.user_cf_content_glab     import UserCfContentGLab
-# from recommenders.item_cf_content_glab     import ItemCfContentGLab
+from recommenders.user_cf_content_glab     import UserCfContentGLab
+from recommenders.item_cf_content_glab     import ItemCfContentGLab
 
 from recommenders.text_similarity import TextSimilarity
 from recommenders.tag_rule        import TagRule
