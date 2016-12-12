@@ -15,7 +15,6 @@ Best K = 27, lb = 0.1, ignored = 0  -> ( 0.4827 )
 Best K = 25, lb = 0.1, ignored = -0.1 -> ( 0.4821 )
 
 
-
 # re-tune this
 Best value of user range : 0.005,
 ig = -0.1,

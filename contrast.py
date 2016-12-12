@@ -8,20 +8,25 @@ from util.eval import generate_ndcg_scores
 TRUTH   = sys.argv[1]
 MODELS  = sys.argv[2].split(",")
 
-r = generate_ndcg_scores(TRUTH, MODELS[0])
-compare = map(lambda m: generate_ndcg_scores(TRUTH, m), MODELS[1:])
+
+compare = map(lambda m: generate_ndcg_scores(TRUTH, m), MODELS)
+
+result = [ ]
 
 # GOOD
-correct = lambda s: s[0] > 0.75
-base_correct  = filter(correct, r)
+# correct = lambda s: s[0] > 0.75
+# base_correct  = filter(correct, r)
 
-valid = set(base_correct)
+# valid = set(base_correct)
 
-for c in compare:
-  c_correct = filter(correct, c)
-  valid = set(c_correct).union(valid)
+for i in range(len(compare[0])):
+  optimal = np.array( map(lambda j: compare[j][i][ 0 ], range(len(compare))) ).max()
+  result.append(optimal)
 
-print float(len(valid)) / float(len(r)) * 100
+  # c_correct = filter(correct, c)
+  # valid = set(c_correct).union(valid)
+
+# print float(len(valid)) / float(len(r)) * 100
 
 # BAD
 # s1  = filter(lambda s: s[0] == 0, r1)
@@ -31,3 +36,6 @@ print float(len(valid)) / float(len(r)) * 100
 # it = set(q1).union( set(q2) ) - set(q1).intersection( set(q2) )
 # un = set(q1).union( set(q2) )
 # print "BAD : {0}%".format(float(len(it)) / float(len(r1)) * 100)
+
+
+print np.array(result).mean()
